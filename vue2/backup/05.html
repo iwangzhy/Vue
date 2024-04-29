@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Vue2 学习</title>
+  <!-- 引入 Vue ， 会提供一个 Vue 对象 -->
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.7.16/dist/vue.js"></script>
+</head>
+<body>
+<div id="app">
+
+</div>
+
+<script type="text/javascript">
+  let obj1 = {x: 100};
+  let obj2 = {y: 200};
+
+  Object.defineProperty(obj2, 'x', {
+    get() {
+      return obj1.x;
+    },
+    set(v) {
+      obj1.x = v;
+    }
+  });
+  console.log(obj2);
+</script>
+</body>
+</html>

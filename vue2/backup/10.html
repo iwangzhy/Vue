@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Vue2 学习</title>
+  <!-- 引入 Vue ， 会提供一个 Vue 对象 -->
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.7.16/dist/vue.js"></script>
+</head>
+<body>
+<div id="app">
+  <h2>姓名：{{ name }}</h2>
+  <h2>地址：{{ address }}</h2>
+  <input type="text" v-model:value="name">
+  <br>
+  <input type="text" v-model="address">
+  <br>
+  <input type="text" v-model="fullname" placeholder="fullname">
+  <br>
+  <p>{{ name.toUpperCase() }} - {{ address }}</p>  <br>
+  <p>{{ fullName() }}</p>  <br>
+  <p>{{ fullname}}</p>  <br>
+  <p>{{ alias1}}</p>  <br>
+  <p>{{ alias2}}</p>  <br>
+</div>
+
+<script type="text/javascript">
+  Vue.config.keyCodes.huiche = 13;
+
+  const vm = new Vue({
+    el: "#app",
+    data() {
+      return {
+        name: 'wangzhy',
+        address: 'China'
+      }
+    },
+    methods: {
+      fullName() {
+        return this.name.toUpperCase() + '-' + this.address;
+      }
+    },
+    computed: {
+      // 计算属性
+      fullname: {
+        get() {
+          console.log("get");
+          return this.name.toUpperCase() + '-' + this.address;
+        },
+        set(value) {
+          console.log(value);
+          if (value) {
+            [this.name, this.address] = value.split("-");
+          }
+        }
+      },
+      // 计算属性的名称
+      alias1: function () {
+        return "alias1：" + this.name.toUpperCase() + '-' + this.address;
+      },
+      alias2() {
+        return "alias2：" + this.name.toUpperCase() + '-' + this.address;
+      }
+    }
+  });
+</script>
+</body>
+</html>

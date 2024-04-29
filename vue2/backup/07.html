@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Vue2 学习</title>
+  <!-- 引入 Vue ， 会提供一个 Vue 对象 -->
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.7.16/dist/vue.js"></script>
+</head>
+<body>
+<div id="app">
+  <h2>姓名：{{ name }}</h2>
+  <h2>地址：{{ address }}</h2>
+  <a href="https://wangzhy.com" @click="showInfo">Blog1</a> <br>
+  <a href="https://wangzhy.com" @click.prevent="showInfo">Blog2</a><br>
+  <a href="https://wangzhy.com" @click.once="showInfo">Blog3</a><br>
+  <a href="https://wangzhy.com" @click.capture="showInfo">Blog4</a><br>
+</div>
+
+<script type="text/javascript">
+  const vm = new Vue({
+    el: "#app",
+    data() {
+      return {
+        name: 'wangzhy',
+        address: 'China'
+      }
+    },
+    methods: {
+      showInfo(e) {
+        // 阻止默认行为
+        e.preventDefault();
+        alert(this.name);
+      }
+    }
+  });
+</script>
+</body>
+</html>

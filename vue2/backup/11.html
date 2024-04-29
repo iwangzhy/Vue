@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Vue2 学习</title>
+  <!-- 引入 Vue ， 会提供一个 Vue 对象 -->
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.7.16/dist/vue.js"></script>
+</head>
+<body>
+<div id="app">
+  <h2>{{ count }}</h2>
+  <h2>姓名：{{ person.name }}</h2>
+  <h2>年龄：{{ person.age }}</h2>
+  <button @click="person.age++; count++;">增加年龄</button>
+</div>
+
+<script type="text/javascript">
+  const vm = new Vue({
+    el: "#app",
+    data() {
+      return {
+        count: 0,
+        person: {
+          name: 'wangzhiyuan',
+          age: 18
+        }
+      }
+    },
+    computed: {},
+    watch: {
+      count(newVal, oldVal) {
+        console.log('count:', newVal, oldVal);
+      }
+    }
+  });
+</script>
+</body>
+</html>

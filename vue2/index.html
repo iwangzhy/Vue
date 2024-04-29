@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Vue2 学习</title>
+  <!-- 引入 Vue ， 会提供一个 Vue 对象 -->
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.7.16/dist/vue.js"></script>
+  <style type="text/css">
+    .basic {
+      width: 200px;
+      height: 200px;
+      border: 1px solid black;
+
+      -webkit-user-select: none; /* Safari */
+      -moz-user-select: none; /* Firefox */
+      -ms-user-select: none; /* Internet Explorer/Edge */
+      user-select: none;
+    }
+
+    .active {
+      background: #ddd;
+    }
+
+    .c1{
+      border-width: 3px;
+    }
+
+    .c2{
+      font-size: 30px;
+    }
+
+    .c3{
+      border-radius: 5px;
+    }
+
+  </style>
+</head>
+<body>
+<div id="app">
+  <div class="basic" :class="status" @click="changeStatus"> {{ name }} </div>
+
+  <div class="basic" :class="arr" @click="changeStatus"> {{ name }} </div>
+
+  <div class="basic" :class="classObj" @click="changeStatus"> {{ name }} </div>
+<!--  <div class="basic" :class="status" @click="changeStatus"> {{ name }} </div>-->
+</div>
+
+<script type="text/javascript">
+  const vm = new Vue({
+    el: "#app",
+    data() {
+      return {
+        name: "wangzhy.com",
+        status: "",
+        arr:["c1","c2","c3"],
+        classObj:{
+          c1:true,
+          c2:false,
+          c3:true
+        }
+      }
+    },
+    methods: {
+      changeStatus() {
+        this.status = this.status === "active" ? "" : "active";
+      }
+    },
+    computed: {},
+    watch: {}
+  });
+</script>
+</body>
+</html>

@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Vue2 学习</title>
+  <!-- 引入 Vue ， 会提供一个 Vue 对象 -->
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.7.16/dist/vue.js"></script>
+</head>
+<body>
+<div id="app">
+  <h2>姓名：{{ name }}</h2>
+  <h2>地址：{{ address }}</h2>
+  <input type="text" @keydown.enter="showInfo" placeholder="按下回车提示输入">
+  <br>
+  <input type="text" @keydown.huiche="showInfo" placeholder="按下回车提示输入">
+</div>
+
+<script type="text/javascript">
+  Vue.config.keyCodes.huiche = 13;
+
+  const vm = new Vue({
+    el: "#app",
+    data() {
+      return {
+        name: 'wangzhy',
+        address: 'China'
+      }
+    },
+    methods: {
+      showInfo(e) {
+        // console.log(e.keyCode);  // 13 回车
+        console.log(e.key, e.keyCode);
+        // console.log(e.target.value);
+      }
+    }
+  });
+</script>
+</body>
+</html>

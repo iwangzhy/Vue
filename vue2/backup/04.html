@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Vue2 学习</title>
+  <!-- 引入 Vue ， 会提供一个 Vue 对象 -->
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.7.16/dist/vue.js"></script>
+</head>
+<body>
+<div id="app">
+  <h1>数据绑定</h1>
+  单向数据绑定: <input type="text" v-bind:value="name1"> <br>
+  双向数据绑定: <input type="text" v-model:value="name2">
+  <hr>
+
+
+  单向数据绑定: <input type="text" :value="name1"> <br>
+  双向数据绑定: <input type="text" v-model="name2">
+
+</div>
+
+<script type="text/javascript">
+  // 阻止 Vue 在启动时生成生产提示
+  Vue.config.productionTip = false;
+  // 创建 Vue 实例
+  const vue = new Vue({
+    el: '#app', // element，指定 Vue 实例挂载的元素
+    data: { // data 用于存储数据
+      name1: 'WangZhiyuan',
+      name2: 'wangzhy'
+    }
+  });
+</script>
+</body>
+</html>

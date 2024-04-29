@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Vue2 学习</title>
+  <!-- 引入 Vue ， 会提供一个 Vue 对象 -->
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.7.16/dist/vue.js"></script>
+</head>
+<body>
+<div id="app">
+  <h2>姓名：{{ name }}</h2>
+  <h2>地址：{{ address }}</h2>
+  <!--事件绑定-->
+  <button v-on:click="showInfo">显示信息1</button>
+  <button @click="showInfo($event,2323)">显示信息2</button>
+</div>
+
+<script type="text/javascript">
+  const vm = new Vue({
+    el: "#app",
+    data() {
+      return {
+        name: 'wangzhy',
+        address: 'China'
+      }
+    },
+    methods: {
+      showInfo(msg, event) {
+        console.log(this === vm); // this 是 vue 对象
+        console.log(msg, event, this.name, this.address);
+      }
+    }
+  });
+</script>
+</body>
+</html>
