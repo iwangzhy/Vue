@@ -282,3 +282,35 @@ const vm = new Vue({
   }
 }
 ```
+
+### 条件渲染
+
+- `v-show=""`：通过控制 display 属性控制元素的显示与隐藏。
+- `v-if=""`、`v-else-if`、`v-else`：通过 DOM 元素的增删来实现显示与隐藏。
+
+注意：
+
+1. `v-if` 可以用在 `template` 标签里面，但是 `v-show` 不行。
+2. `v-if` 适用于切换频率较低场景，`v-show` 适合切换频率高的场景。
+3. `v-if` 的元素有时可能会获取不到，因为元素不存在。
+
+### 列表渲染
+
+`v-for="(p,index) of persons" :key="p.id`
+
+key 的作用：
+
+遍历的流程
+
+1. 根据初始数据生成虚拟 DOM
+2. 将虚拟 DOM 转为真实 DOM
+3. 假设有一个 input 输入框，用户的在这个 input 组件里面的输入是存放在真实 DOM 里面的
+4. 初始数据发送变化
+5. 根据新的数据生成虚拟 DOM
+6. 对比两个虚拟 DOM （**diff算法**）， 对比的时候依赖的是 key。
+    - 根据key 获取到虚拟 DOM 元素
+    - 对比获取到的虚拟 DOM 元素
+    - 如果发现某一部分存在差异，就对这个差异部分重新生成一个新的真实 DOM，并且复用没有差异的部分。
+
+![](https://raw.githubusercontent.com/iwangzhy/picgo/master/20240430102333.png)
+

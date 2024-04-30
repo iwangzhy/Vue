@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Vue2 学习</title>
+  <!-- 引入 Vue ， 会提供一个 Vue 对象 -->
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.7.16/dist/vue.js"></script>
+</head>
+<body>
+<div id="app">
+  <button @click="add">点我</button>
+  <ul>
+    <li v-if="index ===1"> Angular</li>
+    <li v-if="index ===2"> React</li>
+    <li v-if="index ===3"> Vue</li>
+  </ul>
+
+</div>
+
+<script type="text/javascript">
+  const vm = new Vue({
+    el: "#app",
+    data() {
+      return {
+        name: "wangzhy.com",
+        n: 0
+      }
+    },
+    methods: {
+      add() {
+        this.n++;
+      }
+    },
+    computed: {
+      index() {
+        return this.n % 4;
+      }
+    },
+    watch: {}
+  });
+</script>
+</body>
+</html>
