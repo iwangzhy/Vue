@@ -8,16 +8,10 @@
 </head>
 <body>
 <div id="app">
-  <button @click.once="add">点我</button>
+  <button @click="update">更新</button>
   <ul>
-    <!--    <li v-for="p in persons" v-bind:key="p.id">{{ p.name }} - {{ p.blog }}</li>-->
-    <!--    <li v-for="p in persons" :key="p.id">{{ p.name }} - {{ p.blog }}</li>-->
-    <!--    <li v-for="(a,b,c) in persons">{{ a }} - {{ b }} - {{ c }}</li>-->
-    <!--    <li v-for="(p,index) in persons" :key="index">{{p.name}} - {{ index }} - {{ p.id }}</li>-->
-<!--    <li v-for="(p,index) of persons" :key="index">-->
     <li v-for="(p,index) of persons" :key="p.id">
-      {{p.name}} - {{ index }} - {{ p.id }}
-      <input/>
+      {{p.name}} - {{ p.age }} - {{ p.id }}
     </li>
   </ul>
 </div>
@@ -28,41 +22,24 @@
     data() {
       return {
         persons: [
-          {
-            id: 1,
-            name: 'wangzhy',
-            blog: 'wangzhy.com'
-          },
-          {
-            id: 2,
-            name: 'wangzhiyuan',
-            blog: 'x.wangzhy.com'
-          },
-          {
-            id: 3,
-            name: 'wang-zhi-yuan',
-            blog: 'xx.wangzhy.com'
-          }
+          {id: 1, name: '马冬梅', age: 18},
+          {id: 2, name: '周冬雨', age: 22},
+          {id: 3, name: '周杰伦', age: 20},
+          {id: 4, name: '温兆伦', age: 21}
         ]
       }
     },
     methods: {
-      add() {
-        this.persons.unshift({
-          id: 4,
-          name: 'wang-zhi-yuan-4',
-          blog: 'xxx.wangzhy.com'
-        });
-
+      update() {
+        // this.persons[0].age = 99;  // 生效
+        this.persons[0] = {id: 1, name: '马老师', age: 99}; // 这样写，不会触发视图更新S
+        // Object.defineProperties(this.persons[0], {age: 99, name: '马老师'});
       }
     },
-    computed: {
-      index() {
-        return this.n % 4;
-      }
-    },
+    computed: {},
     watch: {}
   });
+  // vm.config.devtools = true;
 </script>
 </body>
 </html>

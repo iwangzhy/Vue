@@ -314,3 +314,80 @@ key 的作用：
 
 ![](https://raw.githubusercontent.com/iwangzhy/picgo/master/20240430102333.png)
 
+### 简单案例
+
+> 根据输入框过滤，并且按照指定条件排序。
+
+使用方法和计算属性都可以完成，但是**建议使用计算属性**。
+
+```
+<div id="app">
+  <input v-model="keyWord"/>
+  <button @click.once="sort = 1">年龄升序</button>
+  <button @click.once="sort = 2">年龄降序</button>
+  <button @click.once="sort = 3">年龄原序</button>
+  <ul>
+    <li v-for="(p,index) of filPersons" :key="p.id">
+      {{p.name}} - {{ p.age }} - {{ p.id }}
+    </li>
+  </ul>
+</div>
+
+const vm = new Vue({
+el: "#app",
+data() {
+  return {
+    keyWord: '',
+    sort: '3', // 1 升序、2 降序、3 原序
+    persons: [
+      {
+        id: 1,
+        name: '马冬梅',
+        age: 18
+      },
+      {
+        id: 2,
+        name: '周冬雨',
+        age: 22
+      },
+      {
+        id: 3,
+        name: '周杰伦',
+        age: 20
+      },
+      {
+        id: 4,
+        name: '温兆伦',
+        age: 21
+      }
+    ]
+  }
+},
+methods: {
+  // sort(value) { // 1 升序、2 降序、3 原序
+  //   this.persons.sort((a, b) => {
+  //     return value === 1 ? a.age - b.age :
+  //         value === 2 ? b.age - a.age :
+  //             a.id - b.id;
+  //   });
+  // }
+},
+computed: {
+  filPersons() {
+    debugger;
+    const arr = this.persons.filter(p => p.name.indexOf(this.keyWord) !== -1);
+    return arr.sort((a, b) => {
+      return this.sort === 1 ? a.age - b.age :
+          this.sort === 2 ? b.age - a.age :
+              a.id - b.id;
+    });
+  }
+},
+watch: {}
+});
+```
+
+### Vue 监测数据的改变原理
+
+
+

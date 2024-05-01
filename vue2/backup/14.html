@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Vue2 学习</title>
+  <!-- 引入 Vue ， 会提供一个 Vue 对象 -->
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.7.16/dist/vue.js"></script>
+</head>
+<body>
+<div id="app">
+  <button @click.once="add">点我</button>
+  <ul>
+    <!--    <li v-for="p in persons" v-bind:key="p.id">{{ p.name }} - {{ p.blog }}</li>-->
+    <!--    <li v-for="p in persons" :key="p.id">{{ p.name }} - {{ p.blog }}</li>-->
+    <!--    <li v-for="(a,b,c) in persons">{{ a }} - {{ b }} - {{ c }}</li>-->
+    <!--    <li v-for="(p,index) in persons" :key="index">{{p.name}} - {{ index }} - {{ p.id }}</li>-->
+    <!--    <li v-for="(p,index) of persons" :key="index">-->
+    <li v-for="(p,index) of persons" :key="p.id">
+      {{p.name}} - {{ index }} - {{ p.id }}
+      <input/>
+    </li>
+  </ul>
+</div>
+
+<script type="text/javascript">
+  const vm = new Vue({
+    el: "#app",
+    data() {
+      return {
+        persons: [
+          {
+            id: 1,
+            name: 'wangzhy',
+            blog: 'wangzhy.com'
+          },
+          {
+            id: 2,
+            name: 'wangzhiyuan',
+            blog: 'x.wangzhy.com'
+          },
+          {
+            id: 3,
+            name: 'wang-zhi-yuan',
+            blog: 'xx.wangzhy.com'
+          }
+        ]
+      }
+    },
+    methods: {
+      add() {
+        this.persons.unshift({
+          id: 4,
+          name: 'wang-zhi-yuan-4',
+          blog: 'xxx.wangzhy.com'
+        });
+
+      }
+    },
+    computed: {
+      index() {
+        return this.n % 4;
+      }
+    },
+    watch: {}
+  });
+</script>
+</body>
+</html>
