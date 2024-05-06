@@ -13,12 +13,15 @@
   <student></student>
   <hr/>
   <hello></hello>
+  <hello/>
+  <hello/>
   <hr/>
 </div>
 
 <script type="text/javascript">
   // 创建组件
   const school = Vue.extend({
+    name: 'xuexiao', // 指定在开发者插件中的名称
     template: `
       <div>
         <h1>{{ name }}</h1>
