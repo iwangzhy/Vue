@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Vue2 学习</title>
+  <!-- 引入 Vue ， 会提供一个 Vue 对象 -->
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.7.16/dist/vue.js"></script>
+</head>
+<body>
+<div id="app">
+  你好，{{ name }}
+  <div v-text="name"></div>
+  <hr>
+  {{ str }}
+  <div v-html="str"></div>
+  <hr>
+  <h2 v-once>初始值：{{ n }} </h2>
+  <h2>当前值: {{ n }} </h2>
+  <button @click="n++">+1</button>
+
+</div>
+
+<script type="text/javascript">
+  const vm = new Vue({
+    el: "#app",
+    data: {
+      name: 'wangzhy',
+      str: '<h2>哈哈哈哈</h2>',
+      n: 1
+    },
+    methods: {},
+    computed: { // 通过计算属性实现
+    },
+    watch: {},
+    filters: {}
+  });
+</script>
+</body>
+</html>

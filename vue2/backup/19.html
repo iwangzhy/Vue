@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Vue2 学习</title>
+  <!-- 引入 Vue ， 会提供一个 Vue 对象 -->
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.7.16/dist/vue.js"></script>
+</head>
+<body>
+<div id="app">
+  <form @submit.prevent="submit">
+    账号：
+    <input type="text" v-model.trim="userInfo.account"><br><br>
+    密码：
+    <input type="password" v-model="userInfo.password"><br><br>
+    年龄：
+    <input v-model.number="userInfo.age"><br><br>
+    性别：
+    男<input type="radio" value="male" name="sex" v-model="userInfo.sex">
+    女<input type="radio" value="female" name="sex" v-model="userInfo.sex">
+    <br><br>
+    爱好：
+    <input type="checkbox" value="抽烟" name="hobby" v-model="userInfo.hobby">抽烟
+    <input type="checkbox" value="喝酒" name="hobby" v-model="userInfo.hobby">喝酒
+    <input type="checkbox" value="烫头" name="hobby" v-model="userInfo.hobby">烫头
+    <br><br>
+    所属校区
+    <select v-model="userInfo.city">
+      <option value="北京">北京</option>
+      <option value="上海">上海</option>
+      <option value="广州">广州</option>
+      <option value="深圳">深圳</option>
+    </select>
+    <br><br>
+    其他信息：
+    <textarea v-model.lazy="userInfo.others"></textarea>
+    <br><br>
+    <input v-model="userInfo.agree" type="checkbox">阅读并接收<a href="#">用户协议</a>
+    <br><br>
+    <button>提交</button>
+  </form>
+</div>
+
+<script type="text/javascript">
+  const vm = new Vue({
+    el: "#app",
+    data: {
+      userInfo: {
+        account: '',
+        password: '',
+        age:'',
+        sex: '',
+        hobby: [],
+        city: '',
+        others: '',
+        agree: false
+      }
+    },
+    methods: {
+      submit() {
+        console.log(this.userInfo);
+
+      }
+    },
+    computed: {},
+    watch: {}
+  });
+</script>
+</body>
+</html>

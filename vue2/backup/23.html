@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Vue2 学习</title>
+  <!-- 引入 Vue ， 会提供一个 Vue 对象 -->
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.7.16/dist/vue.js"></script>
+</head>
+<body>
+<div id="app">
+  <!--  <h2 :style="{opacity:opacity}"> 我爱学习！！！ </h2>-->
+  <h2 :style="{opacity}"> 我爱学习！！！ </h2>
+  <button @click="stop">停止</button>
+</div>
+
+<script type="text/javascript">
+  const vm = new Vue({
+    el: "#app",
+    data: {
+      opacity: 1
+    },
+    methods: {
+      stop() {
+        this.$destroy();
+      }
+    },
+    computed: {},
+    watch: {},
+    filters: {},
+    directives: {},
+    // Vue 完成模板解析并把初始的真实 DOM 元素放入页面之后(挂载完毕)，会调用 mounted 方法
+    beforeCreate() {
+      console.log('beforeCreate');
+    },
+    created() {
+      console.log('created')
+    },
+    beforeMount() {
+      console.log('beforeMount');
+    },
+    mounted() {
+      console.log('mounted');
+      this.timer = setInterval(() => {
+        this.opacity -= 0.01;
+        if (this.opacity <= 0) {
+          this.opacity = 1;
+        }
+      }, 16);
+    },
+    beforeUpdate() {
+      console.log('beforeUpdate');
+    },
+    updated() {
+      console.log('updated');
+    },
+    beforeDestroy() {
+      console.log('beforeDestroy');
+      // 清除计时器
+      clearInterval(this.timer);
+    },
+    destroyed() {
+      console.log('destroyed');
+    }
+  });
+</script>
+</body>
+</html>

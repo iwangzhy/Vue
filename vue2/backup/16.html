@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Vue2 学习</title>
+  <!-- 引入 Vue ， 会提供一个 Vue 对象 -->
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.7.16/dist/vue.js"></script>
+</head>
+<body>
+<div id="app">
+  <button @click="update">更新</button>
+  <ul>
+    <li v-for="(p,index) of persons" :key="p.id">
+      {{p.name}} - {{ p.age }} - {{ p.id }}
+    </li>
+  </ul>
+</div>
+
+<script type="text/javascript">
+  const vm = new Vue({
+    el: "#app",
+    data() {
+      return {
+        persons: [
+          {id: 1, name: '马冬梅', age: 18},
+          {id: 2, name: '周冬雨', age: 22},
+          {id: 3, name: '周杰伦', age: 20},
+          {id: 4, name: '温兆伦', age: 21}
+        ]
+      }
+    },
+    methods: {
+      update() {
+        // this.persons[0].age = 99;  // 生效
+        this.persons[0] = {id: 1, name: '马老师', age: 99}; // 这样写，不会触发视图更新S
+        // Object.defineProperties(this.persons[0], {age: 99, name: '马老师'});
+      }
+    },
+    computed: {},
+    watch: {}
+  });
+  // vm.config.devtools = true;
+</script>
+</body>
+</html>

@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Vue2 学习</title>
+  <!-- 引入 Vue ， 会提供一个 Vue 对象 -->
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.7.16/dist/vue.js"></script>
+</head>
+<body>
+<div id="app">
+  <h2 v-once>初始值：{{ n }} </h2>
+  <h2>当前值：{{ n }} </h2>
+  <h2>放大后的值1：<span v-enlarge="n"></span></h2>
+  <h2>放大后的值2：<span v-enlarge="n+1+2"></span></h2>
+  <button @click="n++">+1</button>
+  <hr/>
+  <input type="text" v-fbind="n"/>
+
+</div>
+
+<script type="text/javascript">
+  const vm = new Vue({
+    el: "#app",
+    data: {
+      n: 1
+    },
+    methods: {},
+    computed: {},
+    watch: {},
+    filters: {},
+    directives: { // 自定义指令
+      enlarge(element, binding) {
+        element.innerHTML = binding.value * 10;
+      },
+      fbind: {
+        // 指令与元素成功绑定
+        bind(element, binding) {
+          console.log("bind");
+          element.innerHTML = binding.value;
+        },
+        // 指令所在元素被插入页面时
+        inserted(element, binding) {
+          console.log("inserted");
+          element.focus();
+        },
+        // 指令所在的模板被重新解析时
+        update(element, binding) {
+          console.log("update");
+          element.innerHTML = binding.value;
+          element.focus();
+        }
+      }
+    }
+  });
+</script>
+</body>
+</html>

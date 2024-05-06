@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Vue2 学习</title>
+  <!-- 引入 Vue ， 会提供一个 Vue 对象 -->
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.7.16/dist/vue.js"></script>
+  <!-- 操作时间的组件 -->
+  <script src="https://cdn.bootcdn.net/ajax/libs/dayjs/1.11.11/dayjs.min.js"></script>
+</head>
+<body>
+<div id="app">
+  显示格式化后的时间:
+  <ul>
+    <li>计算属性：{{ formatTime }}</li>
+    <li>方法：{{ getFormatTime() }}</li>
+    <li>过滤器实现1：{{ time | timeFormatFilter1}}</li>
+    <li>过滤器实现2：{{ time | timeFormatFilter2('YYYY-MM-DD')}}</li>
+    <li>过滤器实现3：{{ time | timeFormatFilter2('YYYY-MM-DD') | mySlice }}</li>
+  </ul>
+</div>
+
+<script type="text/javascript">
+  Vue.filter('mySlice',function (val) {
+    return val.slice(0,4);
+  });
+
+  const vm = new Vue({
+    el: "#app",
+    data: {
+      time: 1714964260546
+    },
+    methods: {
+      getFormatTime() {
+        return dayjs(this.time).format('YYYY-MM-DD HH:mm:ss');
+      }
+    },
+    computed: { // 通过计算属性实现
+      formatTime() {
+        return dayjs(this.time).format('YYYY-MM-DD HH:mm:ss');
+      }
+    },
+    watch: {},
+    filters: { // 局部过滤器，只能在当前 Vue 对象中使用
+      timeFormatFilter1(time) {
+        return dayjs(time).format('YYYY-MM-DD HH:mm:ss');
+      },
+      timeFormatFilter2(time, str = 'YYYY-MM-DD HH:mm:ss') { // ES6 默认参数
+        return dayjs(time).format(str);
+      },
+      mySlice(value) {
+        return value.slice(0, 4);
+      }
+    }
+  });
+</script>
+</body>
+</html>

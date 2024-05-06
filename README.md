@@ -389,5 +389,261 @@ watch: {}
 
 ### Vue 监测数据的改变原理
 
+数组需要调用下面的方法来修改数组的元素才可以响应式的修改： https://v2.cn.vuejs.org/v2/guide/list.html#%E6%95%B0%E7%BB%84%E6%9B%B4%E6%96%B0%E6%A3%80%E6%B5%8B
 
+- push
+- pop
+- shift
+- unshift
+- splice
+- sort
+- reverse
 
+```
+vm.student.hobby.splice === Array.prototype.splice;  // false 
+
+vm.student.hobby.splice(0,1,'学习');
+```
+
+**Vue.set()**
+
+https://v2.cn.vuejs.org/v2/api/#Vue-set
+
+```
+// Vue.set(vm._data.student,'sex','男');
+// vm.$set(vm._data.student,'sex','女');
+
+// Vue.set(vm.student,'sex','男');
+// vm.$set(vm.student,'sex','女');
+```
+
+**总结**
+
+> 1. Vue 会监视 data 中所有层次的数据。
+> 2. 如何监测对象中的数据？
+     > 通过 setter 实现监视，且要在 new Vue 时就传入要监测的数据。
+> - 对象中后追加的属性，Vue 默认不做响应式处理
+> - 如果给后添加的属性做响应式，可以使用 Vue.set() 或 vm.$set() 方法。
+> 3. 如何监测数组中的数据？
+     > 通过包裹数组更新元素的方法实现，本质就是做了两件事
+> - 调用原生对应的方法对数组进行更新
+> - 重新解析模板，进行页面更新
+> 4. 在 Vue 修改数组中的某个元素一定要用以下方法
+> - push、pop、shift、unshift、splice、sort、reverse
+> - Vue.set、vm.$set
+    > **特别注意：Vue.set()、vm.$set() 不能给 vm 或 vm 的根数据对象添加上属性！！！**
+
+### 收集表单数据（v-model）
+
+v-model 的三个修饰符
+
+- lazy：失去焦点再收集数据
+- number：输入字符串转为有效的数字
+- trim：去除首尾空格
+
+```
+  <form @submit.prevent="submit">
+    账号：
+    <input type="text" v-model.trim="userInfo.account"><br><br>
+    密码：
+    <input type="password" v-model="userInfo.password"><br><br>
+    年龄：
+    <input v-model.number="userInfo.age"><br><br>
+    性别：
+    男<input type="radio" value="male" name="sex" v-model="userInfo.sex">
+    女<input type="radio" value="female" name="sex" v-model="userInfo.sex">
+    <br><br>
+    爱好：
+    <input type="checkbox" value="抽烟" name="hobby" v-model="userInfo.hobby">抽烟
+    <input type="checkbox" value="喝酒" name="hobby" v-model="userInfo.hobby">喝酒
+    <input type="checkbox" value="烫头" name="hobby" v-model="userInfo.hobby">烫头
+    <br><br>
+    所属校区
+    <select v-model="userInfo.city">
+      <option value="北京">北京</option>
+      <option value="上海">上海</option>
+      <option value="广州">广州</option>
+      <option value="深圳">深圳</option>
+    </select>
+    <br><br>
+    其他信息：
+    <textarea v-model.lazy="userInfo.others"></textarea>
+    <br><br>
+    <input v-model="userInfo.agree" type="checkbox">阅读并接收<a href="#">用户协议</a>
+    <br><br>
+    <button>提交</button>
+  </form>
+```
+
+### 过滤器
+
+过滤器是 Vue 提供的一种可以在模板中使用的函数，用于对数据进行处理。
+
+**过滤器并不修改原始数据！！!**
+
+- 全局过滤器 `Vue.filter('name',function(){...});`
+- 局部过滤器
+
+```
+<div id="app">
+  显示格式化后的时间:
+  <ul>
+    <li>计算属性：{{ formatTime }}</li>
+    <li>方法：{{ getFormatTime() }}</li>
+    <li>过滤器实现1：{{ time | timeFormatFilter1}}</li>
+    <li>过滤器实现2：{{ time | timeFormatFilter2('YYYY-MM-DD')}}</li>
+    <li>过滤器实现3：{{ time | timeFormatFilter2('YYYY-MM-DD') | mySlice }}</li>
+  </ul>
+</div>
+
+<script type="text/javascript">
+  Vue.filter('mySlice',function (val) {
+    return val.slice(0,4);
+  });
+
+  const vm = new Vue({
+    el: "#app",
+    data: {
+      time: 1714964260546
+    },
+    methods: {
+      getFormatTime() {
+        return dayjs(this.time).format('YYYY-MM-DD HH:mm:ss');
+      }
+    },
+    computed: { // 通过计算属性实现
+      formatTime() {
+        return dayjs(this.time).format('YYYY-MM-DD HH:mm:ss');
+      }
+    },
+    watch: {},
+    filters: { // 局部过滤器，只能在当前 Vue 对象中使用
+      timeFormatFilter1(time) {
+        return dayjs(time).format('YYYY-MM-DD HH:mm:ss');
+      },
+      timeFormatFilter2(time, str = 'YYYY-MM-DD HH:mm:ss') { // ES6 默认参数
+        return dayjs(time).format(str);
+      },
+      mySlice(value) {
+        return value.slice(0, 4);
+      }
+    }
+  });
+</script>
+```
+
+### 内置指令
+
+- `v-text`：向其所在的节点中渲染文本内容。
+- `v-html`：同 `v-text` 类似，但 `v-html` 可以解析 `html` 标签。**注意 XSS 攻击**
+- `v-cloak`：解决插值表达式闪烁问题。搭配 CSS 可以解决网速慢时页面展示出现 `{{ name }}` 的问题。
+- `v-once`：只渲染一次，后续数据变化不会再次渲染。可用于性能优化（值初始化后就不会变化）。
+- `v-pre`：跳过所在节点的编译过程。
+- `v-on`：绑定事件监听器。
+- `v-bind`： 动态绑定一个或多个特性，或一个组件 prop。
+
+### 自定义指令
+
+自定义指令的调用时机
+
+1. 指令与元素成功绑定时（一上来）。
+2. 指令所在的模板被**重新解析**时。
+
+自定义指令的 3 个回调
+
+- bind
+- inserted
+- update
+
+### 声明周期
+
+![](https://raw.githubusercontent.com/iwangzhy/picgo/master/20240506124325.png)
+
+- beforeCreate：实例初始化之后，数据观测和事件配置之前被调用。
+- created：实例创建完成后被立即调用。在这一步，实例已完成以下的配置：数据观测(data observer)
+  、属性和方法的运算、watch/event 事件回调。然而，挂载阶段还没开始，$el 属性目前不可见。
+- beforeMount：在挂载开始之前被调用：相关的 render 函数首次被调用。
+- mounted：el 被新创建的 vm.$el 替换，并挂载到实例上去之后调用该钩子。
+- beforeUpdate：数据更新时调用，发生在虚拟 DOM 重新渲染和打补丁之前。可以在该钩子中进一步地更改状态，不会触发附加的重渲染过程。
+- updated：由于数据更改导致的虚拟 DOM 重新渲染和打补丁，在这之后会调用该钩子。
+- beforeDestroy：实例销毁之前调用。在这一步，实例仍然完全可用。
+- destroyed：Vue 实例销毁后调用。调用后，Vue 实例指示的所有东西都会解绑，所有的事件监听器会被移除，所有的子实例也会被销毁。
+
+常用的生命周期函数
+- mounted：发送 ajax 请求、启动定时器、绑定自定义事件、订阅消息等【初始化操作】
+- beforeDestroy：清除定时器、解绑自定义事件、取消订阅消息等【收尾工作】
+
+关于销毁 Vue 实例
+1. 销毁后借助 Vue 开发者工具看不到任何信息。
+2. 销毁后自定义事件会失效，但原生 DOM 事件依然有效。
+3. 一般不会在 beforeDestroy 操作数据，因为即使操作数据，也不会再触发更新数据了。
+
+### 组件
+
+1. 创建组件
+2. 注册组件
+3. 使用组件
+
+**非单文件组件**
+
+```
+<div id="app">
+  <!-- 使用组件 -->
+  <school></school>
+  <student></student>
+  <hr/>
+  <hello></hello>
+  <hr/>
+</div>
+
+<script type="text/javascript">
+  // 创建组件
+  const school = Vue.extend({
+    template: `
+      <div>
+        <h1>{{ name }}</h1>
+        <p>{{ address }}</p>
+      </div>
+    `,
+    data() {
+      return {
+        name: '清华大学',
+        address: '北京市海淀区'
+      }
+    }
+  });
+  const student = Vue.extend({
+    template: `
+      <div>
+        <p>{{ name }}</p>
+        <p>{{ age }}</p>
+      </div>
+    `,
+    data() {
+      return {
+        name: '张三',
+        age: 18
+      }
+    }
+  });
+  // 全局注册 hello 组件
+  const hello = Vue.extend({
+    template: `
+      <div>
+        <p>hello wangzhy!!!</p>
+      </div>
+    `
+  });
+
+  Vue.component('hello', hello);
+
+  const vm = new Vue({
+    el: "#app",
+    // 注册组件
+    components: {
+      school,
+      student
+    }
+  });
+</script>
+```
