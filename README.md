@@ -658,3 +658,71 @@ v-model 的三个修饰符
 
 - `<h1 ref="xxx">...</h1>` `<School ref="xxx"></School>`
 - `this.$refs.xxx`
+
+### **props**
+
+把数据从**外部**传给组件。
+
+**传参**
+
+```
+<Student name="李四" sex="female" :age="18"/>
+```
+
+**接收参数**
+
+1. 简单接收 props
+
+```
+  props: [
+    'name', 'sex', 'age'
+  ]
+```
+
+2. 接收 props 并指定类型 (该收收，但是会在控制台输出错误信息。)
+
+```
+  props: {
+    name: String,
+    age: Number,
+    sex: String
+  }
+```
+
+3. 接收 props 并指定类型和默认值和是否必传
+
+```
+  props: {
+    name: {
+      type: String, // name 的类型是 String
+      required: true // name 是必传的
+    },
+    age: {
+      type: Number,
+      default: 18 // age 的默认值是 18   (可传可不传)
+    },
+    sex: {
+      type: String,
+      required: true
+    }
+  }
+```
+
+> 注意：
+> 1. props 接收的属性是不允许修改的（**只读**）。可以在 data 选项定义一个属性来接收 prop 属性。
+> 2. key、ref 等属性是不会传递给子组件的。
+> 3. props 接收的属性优先级是比在 data 选项中定义的属性优先级**高**的。
+
+```
+  data() {
+    console.log(this);
+    return {
+      msg: '我是一个学生!!!',
+      myName: this.name,
+      myAge: this.age
+    }
+  },
+```
+
+### mixin 混入
+

@@ -1,20 +1,20 @@
 <template>
   <div>
-    <Hello/>
+<!--    <Student name="李四" sex="female" age="18"/>-->
+    <Student name="李四" sex="female" :age="18"/>
+<!--    <Student name="李四" sex="female" :age="18"/>-->
   </div>
 </template>
 
 <script>
+
 // 引入组件
-import Hello from './components/Hello.vue'
+import Student from "@/components/Student.vue";
 
 export default {
   name: "App",
-  template: `
-    <App></App>
-  `,
   components: {
-    Hello
+    Student
   }
 }
 </script>
