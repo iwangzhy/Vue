@@ -13,11 +13,11 @@ export default {
   name: "Item",
   methods: {
     handleCheck(id) {
-      this.checkTodo(id);
+      this.$bus.$emit('checkTodo', id);
     },
     deleteOne(id) {
       if (confirm('确定删除?')) {
-        this.delTodo(id);
+        this.$bus.$emit('delTodo', id);
       }
     }
   },

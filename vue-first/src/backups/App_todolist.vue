@@ -4,9 +4,7 @@
       <div class="todo-wrap">
         <!--    绑定自定义事件 addTodo     -->
         <Header @addTodo="receive"/>
-        <List :todos="todos"
-              :checkTodo="checkTodo"
-              :delTodo="delTodo"/>
+        <List :todos="todos"/>
         <Footer :todos="todos"
                 @checkAll="checkAll"
                 @clearAllFinishedTodo="clearAllFinishedTodo"/>
@@ -66,6 +64,10 @@ export default {
       // 数组中的元素的属性有变化时也会触发
       deep: true
     }
+  },
+  mounted() {
+    this.$bus.$on('checkTodo', this.checkTodo);
+    this.$bus.$on('delTodo', this.delTodo);
   }
 }
 </script>
