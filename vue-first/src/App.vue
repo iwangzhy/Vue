@@ -1,116 +1,63 @@
 <template>
   <div id="root">
-    <div class="todo-container">
-      <div class="todo-wrap">
-        <Header :receive="receive"/>
-        <List :todos="todos" :checkTodo="checkTodo"
-              :delTodo="delTodo"/>
-        <Footer :todos="todos"
-                :checkAll="checkAll"
-                :clearAllFinishedTodo="clearAllFinishedTodo"/>
-      </div>
-    </div>
+    <p>学校名称是:{{ schoolName }}</p>
+    <p>学生姓名是:{{ studentName }}</p>
+
+    <School :getSchoolName="getSchoolName"/>
+    <!--    <Student v-on:wangzhy="getStudentName"/>-->
+    <!--        <Student @wangzhy="getStudentName"/>-->
+    <Student ref="student" @click.native="demo"/>
   </div>
 </template>
 
 <script>
 
 // 引入组件
-import Header from './components/todolist/Header.vue';
-import List from './components/todolist/List.vue';
-import Footer from './components/todolist/Footer.vue';
+import Student from "@/components/Student.vue";
+import School from "@/components/School.vue";
 
 export default {
   name: "App",
   components: {
-    Header,
-    List,
-    Footer
+    Student,
+    School
   },
   methods: {
-    receive(todo) {
-      // 添加到最前面
-      this.todos.unshift(todo);
+    getSchoolName(name) {
+      console.log('getSchoolName', name);
+      this.schoolName = name;
     },
-    checkTodo(id) {
-      // filter 会返回一个新的数组
-      this.todos.forEach(i => {
-        if (i.id === id) {
-          i.done = !i.done;
-        }
-      });
+    getStudentName(name) {
+      console.log('getStudentName', name);
+      this.studentName = name;
     },
-    checkAll(isDone) {
-      this.todos.forEach(i => i.done = isDone);
-    },
-    delTodo(id) {
-      this.todos = this.todos.filter(i => i.id !== id);
-    },
-    clearAllFinishedTodo() {
-      this.todos = this.todos.filter(i => !i.done);
+    demo(){
+      alert(123);
     }
+  },
+  mounted() {
+    // 绑定自定义事件
+    // this.$refs.student.$on('wangzhy', this.getStudentName); // 推荐写法
+    // this.$refs.student.$on('wangzhy', function (name, ...params) {
+    //   console.log(this); // 触发自定义事件的 VC 对象. 此处为 Student .
+    //   this.studentName = name;
+    // });
+    this.$refs.student.$on('wangzhy', (name, ...params) => {
+      console.log(this); // 如果将函数改成箭头函数, this 为当前组件的对象, 此处为 App .
+      this.studentName = name;
+    });
+    // this.$refs.student.$once('wangzhy', this.getStudentName);
   },
   data() {
     return {
-      todos: JSON.parse(localStorage.getItem('todos')) || []
+      studentName: '',
+      schoolName: ''
     }
   },
-  watch: {
-    // 当 this.todos 有变化时,修改 localStorage 中的 todos
-    todos: {
-      handler(newVal) {
-        localStorage.setItem('todos', JSON.stringify(newVal));
-      },
-      // 数组中的元素的属性有变化时也会触发
-      deep: true
-    }
-  }
+  watch: {}
 }
 </script>
 
 <style>
-/*base*/
-body {
-  background: #fff;
-}
-
-.btn {
-  display: inline-block;
-  padding: 4px 12px;
-  margin-bottom: 0;
-  font-size: 14px;
-  line-height: 20px;
-  text-align: center;
-  vertical-align: middle;
-  cursor: pointer;
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 1px 2px rgba(0, 0, 0, 0.05);
-  border-radius: 4px;
-}
-
-.btn-danger {
-  color: #fff;
-  background-color: #da4f49;
-  border: 1px solid #bd362f;
-}
-
-.btn-danger:hover {
-  color: #fff;
-  background-color: #bd362f;
-}
-
-.btn:focus {
-  outline: none;
-}
-
-.todo-container {
-  width: 600px;
-  margin: 0 auto;
-}
-
-.todo-container .todo-wrap {
-  padding: 10px;
-  border: 1px solid #ddd;
-  border-radius: 5px;
-}
 </style>
 

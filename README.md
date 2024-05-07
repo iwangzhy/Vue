@@ -71,13 +71,13 @@ console.log(obj2);
 - capture 使用事件的捕获模式(先捕获再冒泡，capture 就是在捕获期间就执行。)
 - self 只有 event.target 是当前操作元素是才触发事件
 - passive 事件的默认行为立即执行，不会等待事件处理函数执行完毕
-    - `@scroll.passive`
-    - `@wheel.passive`
+  - `@scroll.passive`
+  - `@wheel.passive`
 
 ### 键盘事件
 
 - `@keyup` **一般使用 keyup 事件**
-    - `@keyup.entry` 回车的时候触发
+  - `@keyup.entry` 回车的时候触发
 - `@keydown`
 
 **按键别名**
@@ -308,9 +308,9 @@ key 的作用：
 4. 初始数据发送变化
 5. 根据新的数据生成虚拟 DOM
 6. 对比两个虚拟 DOM （**diff算法**）， 对比的时候依赖的是 key。
-    - 根据key 获取到虚拟 DOM 元素
-    - 对比获取到的虚拟 DOM 元素
-    - 如果发现某一部分存在差异，就对这个差异部分重新生成一个新的真实 DOM，并且复用没有差异的部分。
+  - 根据key 获取到虚拟 DOM 元素
+  - 对比获取到的虚拟 DOM 元素
+  - 如果发现某一部分存在差异，就对这个差异部分重新生成一个新的真实 DOM，并且复用没有差异的部分。
 
 ![](https://raw.githubusercontent.com/iwangzhy/picgo/master/20240430102333.png)
 
@@ -674,38 +674,38 @@ v-model 的三个修饰符
 1. 简单接收 props
 
 ```
-  props: [
-    'name', 'sex', 'age'
-  ]
+props: [
+  'name', 'sex', 'age'
+]
 ```
 
 2. 接收 props 并指定类型 (该收收，但是会在控制台输出错误信息。)
 
 ```
-  props: {
-    name: String,
-    age: Number,
-    sex: String
-  }
+props: {
+  name: String,
+  age: Number,
+  sex: String
+}
 ```
 
 3. 接收 props 并指定类型和默认值和是否必传
 
 ```
-  props: {
-    name: {
-      type: String, // name 的类型是 String
-      required: true // name 是必传的
-    },
-    age: {
-      type: Number,
-      default: 18 // age 的默认值是 18   (可传可不传)
-    },
-    sex: {
-      type: String,
-      required: true
-    }
+props: {
+  name: {
+    type: String, // name 的类型是 String
+    required: true // name 是必传的
+  },
+  age: {
+    type: Number,
+    default: 18 // age 的默认值是 18   (可传可不传)
+  },
+  sex: {
+    type: String,
+    required: true
   }
+}
 ```
 
 > 注意：
@@ -714,14 +714,14 @@ v-model 的三个修饰符
 > 3. props 接收的属性优先级是比在 data 选项中定义的属性优先级**高**的。
 
 ```
-  data() {
-    console.log(this);
-    return {
-      msg: '我是一个学生!!!',
-      myName: this.name,
-      myAge: this.age
-    }
-  },
+data() {
+  console.log(this);
+  return {
+    msg: '我是一个学生!!!',
+    myName: this.name,
+    myAge: this.age
+  }
+},
 ```
 
 ### mixin 混入
@@ -857,13 +857,13 @@ Vue.use(plugins);
 ### 组件化编码流程
 
 1. 实现静态组件:抽取组件,使用组件实现静态页面效果.
-    - 如果起名很困难,需要考虑下是不是拆分有问题
-    - 组件按照功能点拆分,命名不要与 html 元素有冲突
+  - 如果起名很困难,需要考虑下是不是拆分有问题
+  - 组件按照功能点拆分,命名不要与 html 元素有冲突
 2. 展示动态数据
-    - 数据的类型 名称是什么?
-    - 数据保存在哪个组件?
-        - 一个组件用,放在组件内
-        - 多个组件使用,放在它们共同的父组件中
+  - 数据的类型 名称是什么?
+  - 数据保存在哪个组件?
+    - 一个组件用,放在组件内
+    - 多个组件使用,放在它们共同的父组件中
 3. 交互--从绑定事件监听开始
 
 **props 适用于:**
@@ -890,7 +890,76 @@ props 传过来的若是对象类型的值,修改对象中的属性时 Vue 不�
   - removeItem(key)
   - clear()
 
+### 组件自定义事件
 
+**绑定自定义事件**
 
+1. 使用 `v-on:xxx` + `$emit`
 
+```
+<Student v-on:wangzhy="getStudentName"/>
+<Student @wangzhy="getStudentName"/>
 
+// Student 组件内
+methods:{
+  sendStudentName(){
+    // 触发 Student 组件身上绑定的 wangzhy 事件.
+    this.$emit('wangzhy', this.name);
+  }
+}
+
+```
+
+2. 使用 `ref` + `$refs`
+
+```
+<Student ref="student"/>
+
+// 引用 Student 的组件内(即父组件)
+mounted() {
+  // 绑定自定义事件
+  // this.$refs.student.$on('wangzhy', this.getStudentName); // 推荐写法
+  // this.$refs.student.$on('wangzhy', function (name, ...params) {
+  //   console.log(this); // 触发自定义事件的 VC 对象. 此处为 Student .
+  //   this.studentName = name;
+  // });
+  this.$refs.student.$on('wangzhy', (name, ...params) => {
+    console.log(this); // 如果将函数改成箭头函数, this 为当前组件的对象, 此处为 App .
+    this.studentName = name;
+  });
+  // this.$refs.student.$once('wangzhy', this.getStudentName);
+}
+```
+
+**解绑自定义事件**
+
+> 谁绑定的谁解绑.
+
+destroy 之后,自定义事件也会被解绑.
+
+```
+methods: {
+  sendStudentName() {
+    // 触发 Student 组件身上绑定的 wangzhy 事件.
+    this.$emit('wangzhy', this.name);
+  },
+  unbindSendStudentName() {
+    // 解绑单个自定义事件
+    this.$off('wangzhy');
+    // 解绑多个自定义事件
+    // this.$off(['wangzhy','wangzhy1']);
+    // 解绑所有自定义事件
+    this.$off();
+  }
+}
+```
+
+**总结**
+
+1. 一种组件之间通信的方式,适用于:`子组件 ==> 父组件`
+2. 使用场景: A 是父组件,B 是子组件,B 想给 A 传数据,那么就需要在 A 中给 B 绑定自定义事件(事件的回调在 A 中) **通过事件的参数将数据从子组件传递给父组件**
+3. 绑定自定义事件: `v-on:xxx` + `$emit` 或 `ref` + `$on`
+4. 触发自定义事件: `this.$emit('xxx',params)`
+5. 解绑自定义事件: `this.$off('xxx')` 或 `this.$off()`(解绑所有自定义事件)
+6. 如果想要在组件上使用原生的事件,需要加上 `.native` 修饰符.例如 `@click.native="xxx"`
+7. 使用 `this.$refs.on('xxx',callback)` 绑定自定义事件时, **`callback` 要么在 `methods` 中配置,要么使用`箭头函数`.** 否则函数的 `this` 会有问题.
