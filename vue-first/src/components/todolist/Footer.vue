@@ -28,16 +28,16 @@ export default {
         return this.todos.filter(item => item.done).length === this.todos.length;
       },
       set(value) {
-        this.checkAll(value);
+        this.$emit('checkAll', value);
       }
     }
   },
   methods: {
     clearAll() {
-      this.clearAllFinishedTodo();
+      this.$emit('clearAllFinishedTodo');
     }
   },
-  props: ['todos', 'checkAll', 'clearAllFinishedTodo']
+  props: ['todos']
 }
 </script>
 

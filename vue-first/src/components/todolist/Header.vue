@@ -25,11 +25,11 @@ export default {
         name: this.name,
         done: false
       }
-      this.receive(obj);
+      // 触发事件
+      this.$emit('addTodo', obj);
       this.name = '';
     }
-  },
-  props: ['receive']
+  }
 }
 </script>
 
