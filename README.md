@@ -726,3 +726,63 @@ v-model 的三个修饰符
 
 ### mixin 混入
 
+两个组件共享一个配置（配置是一样的，可以是属性，方法等）。
+
+mixin 定义的配置的优先级**低于**组件里面的配置的优先级。 (**生命周期函数都会执行。**)
+
+**定义 mixin**
+
+新建一个 js 文件
+
+```
+export const mixin = {
+  data() {
+    return {
+      x: 100,
+      y: 100
+    }
+  },
+  methods: {
+    showName() {
+      alert(this.name);
+    }
+  },
+  beforeCreate() {
+    console.log('mixin beforeCreate');
+  },
+  mounted() {
+    console.log('mixin mounted');
+  }
+}
+```
+
+**使用 mixin**
+
+1. 全局混入
+
+在 main.js 加入以下配置。
+
+> 所有的 VC 都会应用这个 mixin
+
+```
+import {mixin} from '@/mixin/mixin'
+
+// 所有的 VC 都是应用这个 mixin
+Vue.mixin(mixin);
+```
+
+2. 局部混入
+
+在想要混入的组件里面加入下面的配置。
+
+> mixins 必须是数组类型
+
+```
+// 引入一个混入对象
+import {mixin} from '../mixin/mixin'
+
+export default {
+  name: "School",
+  mixins: [mixin]  // 注意：必须是数组
+}
+```

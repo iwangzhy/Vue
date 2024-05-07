@@ -5,9 +5,13 @@
 import Vue from 'vue'
 // import Vue from 'vue/dist/vue'
 import App from './App.vue'
+import {mixin} from '@/mixin/mixin'
 
 // 关闭 Vue 的生产提示
 Vue.config.productionTip = false;
+
+// 所有的 VC 都是应用这个 mixin
+Vue.mixin(mixin);
 
 new Vue({
   // 将 App 组件放入容器中

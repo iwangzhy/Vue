@@ -1,8 +1,7 @@
 <template>
   <div>
-<!--    <Student name="李四" sex="female" age="18"/>-->
     <Student name="李四" sex="female" :age="18"/>
-<!--    <Student name="李四" sex="female" :age="18"/>-->
+    <School/>
   </div>
 </template>
 
@@ -10,10 +9,12 @@
 
 // 引入组件
 import Student from "@/components/Student.vue";
+import School from "@/components/School.vue";
 
 export default {
   name: "App",
   components: {
+    School,
     Student
   }
 }
