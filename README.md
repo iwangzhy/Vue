@@ -877,6 +877,20 @@ props 传过来的若是对象类型的值,修改对象中的属性时 Vue 不�
 
 使用 v-model 时要切记,v-model 绑定的值不能是 props 传递过来的值.
 
+### 浏览器本地存储
+
+- localStorage: 关闭浏览器不丢失数据(无限期,直到手动删除)
+  - setItem(key, value)
+  - getItem(key)
+  - removeItem(key)
+  - clear()
+- sessionStorage: 关闭浏览器后丢失数据
+  - setItem(key, value)
+  - getItem(key)
+  - removeItem(key)
+  - clear()
+
+
 
 
 

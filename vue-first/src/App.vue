@@ -40,23 +40,29 @@ export default {
         }
       });
     },
-    checkAll(isDone){
+    checkAll(isDone) {
       this.todos.forEach(i => i.done = isDone);
     },
     delTodo(id) {
       this.todos = this.todos.filter(i => i.id !== id);
     },
-    clearAllFinishedTodo(){
+    clearAllFinishedTodo() {
       this.todos = this.todos.filter(i => !i.done);
     }
   },
   data() {
     return {
-      todos: [
-        {id: 1, name: '吃饭', done: true},
-        {id: 2, name: '睡觉', done: false},
-        {id: 3, name: '打豆豆', done: true}
-      ]
+      todos: JSON.parse(localStorage.getItem('todos')) || []
+    }
+  },
+  watch: {
+    // 当 this.todos 有变化时,修改 localStorage 中的 todos
+    todos: {
+      handler(newVal) {
+        localStorage.setItem('todos', JSON.stringify(newVal));
+      },
+      // 数组中的元素的属性有变化时也会触发
+      deep: true
     }
   }
 }
