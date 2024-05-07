@@ -1,6 +1,7 @@
 <template>
   <div>
-    <Student name="李四" sex="female" :age="18"/>
+    <h1 class="title">Vue 学习</h1>
+    <Student/>
     <School/>
   </div>
 </template>
@@ -8,8 +9,8 @@
 <script>
 
 // 引入组件
-import Student from "@/components/Student.vue";
 import School from "@/components/School.vue";
+import Student from "@/components/Student.vue";
 
 export default {
   name: "App",
@@ -19,4 +20,10 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+.title {
+  color: red;
+}
+</style>
 

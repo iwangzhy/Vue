@@ -1,7 +1,7 @@
 <template>
-  <div>
+  <div class="test">
     <h1>{{ msg }}</h1>
-    <input type="text" v-fbind="name" :value="name">
+    <h2>学生姓名:{{ name }}</h2>
     <h2>学生性别：{{ sex }}</h2>
     <hr/>
   </div>
@@ -20,6 +20,8 @@ export default {
 }
 </script>
 
-<style scoped lang="scss">
-
+<style scoped>
+.test {
+  background-color: orange;
+}
 </style>

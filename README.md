@@ -849,3 +849,8 @@ import plugins from "@/plugins/plugins";
 // 使用插件
 Vue.use(plugins);
 ```
+
+### scoped 样式
+
+解决不同的 Vue 文件中相同的类名样式选择器.
+

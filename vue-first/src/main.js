@@ -11,10 +11,10 @@ import App from './App.vue';
 // Vue.mixin(mixin);
 
 // ============== plugins ==============
-// 引入插件
-import plugins from "@/plugins/plugins";
-// 使用插件
-Vue.use(plugins);
+// // 引入插件
+// import plugins from "@/plugins/plugins";
+// // 使用插件
+// Vue.use(plugins);
 
 // 关闭 Vue 的生产提示
 Vue.config.productionTip = false;

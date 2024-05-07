@@ -1,8 +1,7 @@
 <template>
-  <div>
-    <h2>学校名称: {{ name }}</h2>
+  <div class="test">
+    <h2 class="title">学校名称: {{ name }}</h2>
     <h2> 地址：{{ address }}</h2>
-    <button @click="sayHi">hello</button>
     <hr/>
   </div>
 </template>
@@ -16,15 +15,12 @@ export default {
       name: '清华大学',
       address: 'China'
     }
-  },
-  methods: {
-    sayHi() {
-      this.hello();
-    }
   }
 }
 </script>
 
-<style scoped lang="scss">
-
+<style scoped>
+.test {
+  background-color: skyblue;
+}
 </style>
