@@ -1028,3 +1028,13 @@ methods: {
   }
 }
 ```
+
+### $set
+
+https://v2.cn.vuejs.org/v2/api/#Vue-set
+
+向响应式对象中添加一个 `property`，并确保这个新 `property` 同样是响应式的，且触发视图更新。
+它必须用于向响应式对象上添加新 `property`，因为 `Vue` 无法探测普通的新增 `property`
+(比如 `this.myObject.newProperty = 'hi'`)
+
+**在使用 $set 之前需要通过 obj.hasOwnProperty('newProperty') 来判断一下是否 obj 对象是否已有这个属性**

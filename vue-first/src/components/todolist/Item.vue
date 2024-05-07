@@ -2,9 +2,17 @@
   <li>
     <label>
       <input type="checkbox" :checked="data.done" @change="handleCheck(data.id)"/>
-      <span>{{ data.name }}</span>
+      <span v-show="!data.isEdit">{{ data.name }}</span>
+      <input v-show="data.isEdit"
+             @blur="handleBlur(data,$event)"
+             type="text"
+             :value="data.name">
     </label>
-    <button class="btn btn-danger" @click="deleteOne(data.id)">删除</button>
+    <button class="btn btn-danger" @click="handleDelete(data.id)">删除</button>
+    <button v-show="!data.isEdit"
+            class="btn btn-edit"
+            @click="handleEdit(data)">编辑
+    </button>
   </li>
 </template>
 
@@ -17,10 +25,25 @@ export default {
     handleCheck(id) {
       this.$bus.$emit('checkTodo', id);
     },
-    deleteOne(id) {
+    // 失去焦点
+    handleBlur(todo, e) {
+      let newName = e.target.value.trim();
+      if (!newName) {
+        return;
+      }
+      todo.isEdit = false;
+      this.$bus.$emit('updateTodo', todo.id, newName);
+    },
+    handleDelete(id) {
       if (confirm('确定删除?')) {
         pubsub.publish('delTodo', id);
-        // this.$bus.$emit('delTodo', id);
+      }
+    },
+    handleEdit(todo) {
+      if (todo.hasOwnProperty('isEdit')) {
+        todo.isEdit = true;
+      } else {
+        this.$set(todo, 'isEdit', true);
       }
     }
   },
