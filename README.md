@@ -994,3 +994,37 @@ new Vue({
   }
 }).$mount('#app');
 ```
+
+### 消息订阅与发布 **pubsub.js**
+
+```
+npm install -g pubsub-js
+```
+
+1. 订阅消息（需要数据的组件）
+
+```
+import pubsub from 'pubsub-js';
+
+mounted() {
+  this.pubId = pubsub.subscribe('hello', (msgName, msg) => {
+    console.log(this);
+    console.log('School 接收到了订阅的消息', msgName, msg);
+  });
+},
+beforeDestroy() {
+  pubsub.unsubscribe(this.pubId);
+}
+```
+
+2. 发布消息（拥有消息的组件）
+
+```
+import pubsub from 'pubsub-js';
+
+methods: {
+  sendStudentName() {
+    pubsub.publish('hello', this.name);
+  }
+}
+```

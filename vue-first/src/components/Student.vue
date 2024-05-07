@@ -9,6 +9,7 @@
 </template>
 
 <script>
+import pubsub from 'pubsub-js';
 export default {
   name: "Student",
   data() {
@@ -20,8 +21,7 @@ export default {
   },
   methods: {
     sendStudentName() {
-      // 触发 hello 事件，将自身数据传递给父组件
-      this.$bus.$emit('hello', this.name);
+      pubsub.publish('hello', this.name);
     }
   }
 }

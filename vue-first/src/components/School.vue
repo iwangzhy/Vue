@@ -7,6 +7,7 @@
 </template>
 
 <script>
+import pubsub from 'pubsub-js';
 
 export default {
   name: "School",
@@ -18,15 +19,13 @@ export default {
   },
   methods: {},
   mounted() {
-    console.log(this.$bus);
-    // 接收事件
-    this.$bus.$on('hello', (data) => {
-      console.log('School 接收到了', data)
-    })
+    this.pubId = pubsub.subscribe('hello', (msgName, msg) => {
+      console.log(this);
+      console.log('School 接收到了订阅的消息', msgName, msg);
+    });
   },
   beforeDestroy() {
-    // 组件销毁时，解绑事件
-    this.$bus.$off('hello');
+    pubsub.unsubscribe(this.pubId);
   }
 }
 </script>
