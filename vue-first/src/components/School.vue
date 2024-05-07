@@ -2,7 +2,6 @@
   <div class="test">
     <h2 class="title">学校名称: {{ name }}</h2>
     <h2> 地址：{{ address }}</h2>
-    <button @click="sendSchoolName">发送校名</button>
     <hr/>
   </div>
 </template>
@@ -17,12 +16,18 @@ export default {
       address: 'China'
     }
   },
-  methods: {
-    sendSchoolName() {
-      this.getSchoolName(this.name);
-    }
+  methods: {},
+  mounted() {
+    console.log(this.$bus);
+    // 接收事件
+    this.$bus.$on('hello', (data) => {
+      console.log('School 接收到了', data)
+    })
   },
-  props: ['getSchoolName']
+  beforeDestroy() {
+    // 组件销毁时，解绑事件
+    this.$bus.$off('hello');
+  }
 }
 </script>
 

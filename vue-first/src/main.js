@@ -19,9 +19,16 @@ import App from './App.vue';
 // 关闭 Vue 的生产提示
 Vue.config.productionTip = false;
 
+// const  Demo = Vue.extend({});
+// Vue.prototype.x = new Demo();
+
 new Vue({
   // 将 App 组件放入容器中
   render: h => h(App),
+  beforeCreate() {
+    // 全局事件总线
+    Vue.prototype.$bus = this;
+  }
 }).$mount('#app');
 
 // new Vue({
