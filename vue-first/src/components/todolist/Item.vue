@@ -9,6 +9,8 @@
 </template>
 
 <script>
+import pubsub from 'pubsub-js';
+
 export default {
   name: "Item",
   methods: {
@@ -17,7 +19,8 @@ export default {
     },
     deleteOne(id) {
       if (confirm('确定删除?')) {
-        this.$bus.$emit('delTodo', id);
+        pubsub.publish('delTodo', id);
+        // this.$bus.$emit('delTodo', id);
       }
     }
   },
