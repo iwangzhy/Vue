@@ -1166,7 +1166,7 @@ devServer: {
 
 ### 插槽 slot
 
-1. 默认插槽
+1. **默认插槽**
 
 在子组件中使用 `<slot/>` 或者 `<slot>默认值...</slot>` 定义一个插槽。
 
@@ -1199,5 +1199,52 @@ devServer: {
 </template>
 ```
 
-2. 具名插槽
+2. **具名插槽**
+
+```
+<template>
+  <div class="category">
+    <h3>{{ title }}分类</h3>
+    <slot name="center">默认值1</slot>
+    <hr/>
+    <slot name="footer">默认值2</slot>
+  </div>
+</template>
+```
+
+使用时，如果要将多个 DOM 放入插槽有三种写法
+1. 每个 DOM 加上 `slot="xxx"`
+2. 使用 `template` 标签，`template` 标签上加上 `slot="xxx"`，`template` 标签里面放入多个 DOM。
+3. 使用 `template` 标签，`template` 标签上加上 `v-slot:xxx`，`template` 标签里面放入多个 DOM。
+
+```
+<template>
+  <div class="container">
+    <Category title="美食">
+      <img slot="center" :src="foods" alt="美食">
+      <a slot="footer" href="https://baidu.com">更多美食...</a>
+    </Category>
+    <Category title="游戏">
+      <ul slot="center">
+        <li v-for="(i,index) in games" :key="index">{{ i }}</li>
+      </ul>
+      <template slot="footer">
+        <a href="https://baidu.com">更多游戏1...</a>
+        <a href="https://baidu.com">更多游戏2...</a>
+      </template>
+    </Category>
+    <Category title="电影">
+      <video slot="center" :src="films" controls/>
+      <template v-slot:footer>
+        <a href="https://baidu.com">更多电影1...</a>
+        <a href="https://baidu.com">更多电影2...</a>
+      </template>
+    </Category>
+  </div>
+</template>
+```
+
+3. **作用域插槽**
+
+
 

@@ -1,15 +1,24 @@
 <template>
   <div class="container">
     <Category title="美食">
-      <img :src="foods" alt="美食">
+      <img slot="center" :src="foods" alt="美食">
+      <a slot="footer" href="https://baidu.com">更多美食...</a>
     </Category>
     <Category title="游戏">
-      <ul>
+      <ul slot="center">
         <li v-for="(i,index) in games" :key="index">{{ i }}</li>
       </ul>
+      <template slot="footer">
+        <a href="https://baidu.com">更多游戏1...</a>
+        <a href="https://baidu.com">更多游戏2...</a>
+      </template>
     </Category>
     <Category title="电影">
-      <video :src="films" controls/>
+      <video slot="center" :src="films" controls/>
+      <template v-slot:footer>
+        <a href="https://baidu.com">更多电影1...</a>
+        <a href="https://baidu.com">更多电影2...</a>
+      </template>
     </Category>
   </div>
 </template>
