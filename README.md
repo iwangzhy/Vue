@@ -1052,3 +1052,67 @@ https://v2.cn.vuejs.org/v2/guide/components-edge-cases.html#%E8%AE%BF%E9%97%AE%E
 `$nextTick` 指定的回调函数会在 DOM 节点更新完毕之后再执行。
 
 使用场景：当改变数据后，要基于更新后的新 DOM 进行某些操作时，要在 `$nextTick` 的回调函数中执行。
+
+### 过渡与动画
+
+> 在插入、更新或移除 DOM 元素时，在合适的时候给元素添加样式类名。
+
+```
+<transition appear>
+  <h2 v-show="isShow">hello, {{ name }} !!!</h2>
+</transition>
+```
+
+```css
+.v-enter-active {
+  animation: hello 1s;
+}
+
+.v-leave-active {
+  animation: hello 1s reverse;
+}
+
+@keyframes hello {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(0px);
+  }
+}
+```
+
+1. 元素进入的样式
+- `v-enter`：进入的起点
+- `v-enter-active`：进入的过程中
+- `v-enter-to`：进入的终点
+2. 元素离开的样式
+- `v-leave`：离开的起点
+- `v-leave-active`：离开过程中
+- `v-leave-to`：离开的终点
+
+**第三方组件 `animate.css`**
+
+https://animate.style/
+
+- 安装
+
+```
+npm install animate.css
+```
+
+- 使用时不需要自己写动画的样式了，直接引入 `class` 即可。
+
+```
+// 直接引入 css 样式
+import 'animate.css';
+
+<transition-group
+    name="animate__animated animate__bounce"
+    enter-active-class="animate__swing"
+    leave-active-class="animate__backOutUp"
+    appear>
+  <h2 class="hello" v-show="!isShow" key="1">hello1, {{ name }} !!!</h2>
+  <h2 class="hello" v-show="isShow" key="2">hello2, {{ name }} !!!</h2>
+</transition-group>
+```
