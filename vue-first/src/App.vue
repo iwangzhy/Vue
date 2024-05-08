@@ -1,23 +1,27 @@
 <template>
-  <div id="root">
-    <Hello/>
-    <Hello1/>
+  <div>
+    <button @click="getInfo">获取信息</button>
   </div>
 </template>
 
 <script>
 
-// 引入组件
-import Hello from "@/components/Hello.vue";
-import Hello1 from "@/components/Hello1.vue";
+// 引入 axios
+import axios from 'axios';
 
 export default {
   name: "App",
-  components: {
-    Hello,
-    Hello1
+  components: {},
+  methods: {
+    getInfo() {
+      // CORS 跨域问题。
+      axios.get('http://localhost:8080/wangzhy/idea.md').then(res => {
+        console.log('请求成功了。。。', res.data);
+      }, error => {
+        console.log('请求失败了。。。', error.message)
+      })
+    }
   },
-  methods: {},
   mounted() {
   },
   data() {

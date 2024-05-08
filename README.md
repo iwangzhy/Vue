@@ -1116,3 +1116,43 @@ import 'animate.css';
   <h2 class="hello" v-show="isShow" key="2">hello2, {{ name }} !!!</h2>
 </transition-group>
 ```
+
+### ajax 请求
+
+1. `xhr`
+2. `jQuery`： `$.get` `$.post`
+3. `axios` **推荐**
+4. `fetch`  2 层 Promise、兼容性稍差。
+
+**Vue-CLI**
+
+配置代理服务器。修改 `vue.config.js`
+
+https://cli.vuejs.org/zh/config/#devserver-proxy
+
+- **配置1** 
+
+缺点：
+1. 只能配置 1 个代理服务器
+2. 不能控制请求是否走代理
+
+```
+devServer: {
+  proxy: 'http://localhost:5000'
+}
+```
+
+- **配置2**
+
+```
+devServer: {
+  proxy: {
+    '/wangzhy': {
+      target: 'https://wangzhy.com',
+      ws: true, // websocket
+      changeOrigin: true,
+      pathRewrite: {'^/wangzhy': ''} // 把请求的 "/wangzhy" 去掉
+    }
+  }
+}
+```
