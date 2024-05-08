@@ -1,16 +1,19 @@
 <template>
   <div class="category">
     <h3>{{ title }}分类</h3>
-    <slot name="center">默认值1</slot>
-    <hr/>
-    <slot name="footer">默认值2</slot>
+    <slot :games="games">默认值1</slot>
   </div>
 </template>
 
 <script>
 export default {
   name: "Category",
-  props: ['title', 'listData']
+  props: ['title'],
+  data() {
+    return {
+      games: ['aaa', 'bbb', 'cccc', 'dddd', 'eeee']
+    }
+  }
 }
 </script>
 

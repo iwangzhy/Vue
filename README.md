@@ -1213,6 +1213,7 @@ devServer: {
 ```
 
 使用时，如果要将多个 DOM 放入插槽有三种写法
+
 1. 每个 DOM 加上 `slot="xxx"`
 2. 使用 `template` 标签，`template` 标签上加上 `slot="xxx"`，`template` 标签里面放入多个 DOM。
 3. 使用 `template` 标签，`template` 标签上加上 `v-slot:xxx`，`template` 标签里面放入多个 DOM。
@@ -1245,6 +1246,46 @@ devServer: {
 ```
 
 3. **作用域插槽**
+
+数据在定义插槽的组件里面,**数据的展示是由使用插槽的组件决定的**。
+
+```
+<template>
+  <div class="category">
+    <h3>{{ title }}分类</h3>
+    <slot :games="games">默认值1</slot>
+  </div>
+</template>
+```
+
+在使用插槽时(**必须使用template标签**)，通过 `scope="xxx"`、`v-slot="xxx"`、`v-slot="{xxx}"` 来接收数据。
+
+```
+<template>
+  <div class="container">
+    <Category title="游戏">
+      <template scope="games">
+        <ol>
+          <li v-for="(i,index) in games.games" :key="index">{{ i }}</li>
+        </ol>
+      </template>
+    </Category>
+    <Category title="游戏">
+      <template v-slot="games">
+        <ol>
+          <li v-for="(i,index) in games.games" :key="index">{{ i }}</li>
+        </ol>
+      </template>
+    </Category>
+    <Category title="游戏">
+      <template v-slot="{games}">
+        <h4 v-for="(i,index) in games" :key="index">{{ i }}</h4>
+      </template>
+    </Category>
+  </div>
+</template>
+```
+
 
 
 

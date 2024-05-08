@@ -1,23 +1,22 @@
 <template>
   <div class="container">
-    <Category title="美食">
-      <img slot="center" :src="foods" alt="美食">
-      <a slot="footer" href="https://baidu.com">更多美食...</a>
-    </Category>
     <Category title="游戏">
-      <ul slot="center">
-        <li v-for="(i,index) in games" :key="index">{{ i }}</li>
-      </ul>
-      <template slot="footer">
-        <a href="https://baidu.com">更多游戏1...</a>
-        <a href="https://baidu.com">更多游戏2...</a>
+      <template scope="games">
+        <ol>
+          <li v-for="(i,index) in games.games" :key="index">{{ i }}</li>
+        </ol>
       </template>
     </Category>
-    <Category title="电影">
-      <video slot="center" :src="films" controls/>
-      <template v-slot:footer>
-        <a href="https://baidu.com">更多电影1...</a>
-        <a href="https://baidu.com">更多电影2...</a>
+    <Category title="游戏">
+      <template v-slot="games">
+        <ol>
+          <li v-for="(i,index) in games.games" :key="index">{{ i }}</li>
+        </ol>
+      </template>
+    </Category>
+    <Category title="游戏">
+      <template v-slot="{games}">
+        <h4 v-for="(i,index) in games" :key="index">{{ i }}</h4>
       </template>
     </Category>
   </div>
@@ -32,13 +31,6 @@ export default {
   components: {Category},
   methods: {},
   mounted() {
-  },
-  data() {
-    return {
-      foods: "https://www.google.com/images/branding/googlelogo/2x/googlelogo_color_92x30dp.png",
-      games: ['aaa', 'bbb', 'cccc', 'dddd', 'eeee'],
-      films: "https://encrypted-vtbn0.gstatic.com/video?q=tbn:ANd9GcSUVe8tNFft9WTXoEt4NDEuMFrHUV6w-VmI3g"
-    }
   },
   watch: {}
 }
