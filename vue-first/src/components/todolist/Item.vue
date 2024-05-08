@@ -1,24 +1,32 @@
 <template>
-  <li>
-    <label>
-      <input type="checkbox" :checked="data.done" @change="handleCheck(data.id)"/>
-      <span v-show="!data.isEdit">{{ data.name }}</span>
-      <input v-show="data.isEdit"
-             @blur="handleBlur(data,$event)"
-             type="text"
-             :value="data.name"
-             ref="inputName">
-    </label>
-    <button class="btn btn-danger" @click="handleDelete(data.id)">删除</button>
-    <button v-show="!data.isEdit"
-            class="btn btn-edit"
-            @click="handleEdit(data)">编辑
-    </button>
-  </li>
+  <transition
+      name="animate__animated animate__bounce"
+      enter-active-class="animate__fadeInDownBig"
+      leave-active-class="animate__bounceOutRight"
+      appear>
+    <li>
+      <label>
+        <input type="checkbox" :checked="data.done" @change="handleCheck(data.id)"/>
+        <span v-show="!data.isEdit">{{ data.name }}</span>
+        <input v-show="data.isEdit"
+               @blur="handleBlur(data,$event)"
+               type="text"
+               :value="data.name"
+               ref="inputName">
+      </label>
+      <button class="btn btn-danger" @click="handleDelete(data.id)">删除</button>
+      <button v-show="!data.isEdit"
+              class="btn btn-edit"
+              @click="handleEdit(data)">编辑
+      </button>
+    </li>
+  </transition>
+
 </template>
 
 <script>
 import pubsub from 'pubsub-js';
+import 'animate.css'
 
 export default {
   name: "Item",
@@ -97,5 +105,22 @@ li:hover {
 
 li:hover button {
   display: inline-block;
+}
+/* 动画样式 */
+.v-enter-active {
+  animation: hello 1s;
+}
+
+.v-leave-active {
+  animation: hello 1s reverse;
+}
+
+@keyframes hello {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(0px);
+  }
 }
 </style>
