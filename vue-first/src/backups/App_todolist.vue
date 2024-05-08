@@ -20,6 +20,8 @@ import Header from './components/todolist/Header.vue';
 import List from './components/todolist/List.vue';
 import Footer from './components/todolist/Footer.vue';
 
+import pubsub from 'pubsub-js';
+
 export default {
   name: "App",
   components: {
@@ -66,8 +68,23 @@ export default {
     }
   },
   mounted() {
+    // this.$bus.$on('delTodo', this.delTodo);
+    this.delTodoId = pubsub.subscribe('delTodo', (msg, id) => {
+      this.delTodo(id);
+    });
     this.$bus.$on('checkTodo', this.checkTodo);
-    this.$bus.$on('delTodo', this.delTodo);
+
+    this.$bus.$on('updateTodo', (id, name) => {
+      this.todos.forEach(t => {
+        if (t.id === id) {
+          t.name = name;
+        }
+      })
+    });
+  },
+  beforeDestroy() {
+    this.$bus.$off('checkTodo', 'delTodo');
+    pubsub.unsubscribe(this.delTodoId);
   }
 }
 </script>
@@ -100,6 +117,18 @@ body {
 .btn-danger:hover {
   color: #fff;
   background-color: #bd362f;
+}
+
+.btn-edit {
+  color: #fff;
+  background-color: #5aca74;
+  border: 1px solid #247ebd;
+  margin-right: 3px;
+}
+
+.btn-edit:hover {
+  color: #fff;
+  background-color: #09f33f;
 }
 
 .btn:focus {

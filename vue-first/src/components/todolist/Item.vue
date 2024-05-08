@@ -6,7 +6,8 @@
       <input v-show="data.isEdit"
              @blur="handleBlur(data,$event)"
              type="text"
-             :value="data.name">
+             :value="data.name"
+             ref="inputName">
     </label>
     <button class="btn btn-danger" @click="handleDelete(data.id)">删除</button>
     <button v-show="!data.isEdit"
@@ -45,6 +46,10 @@ export default {
       } else {
         this.$set(todo, 'isEdit', true);
       }
+      // 获取焦点
+      this.$nextTick(function () {
+        this.$refs.inputName.focus();
+      });
     }
   },
   props: ['data', 'checkTodo', 'delTodo']

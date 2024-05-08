@@ -1038,3 +1038,17 @@ https://v2.cn.vuejs.org/v2/api/#Vue-set
 (比如 `this.myObject.newProperty = 'hi'`)
 
 **在使用 $set 之前需要通过 obj.hasOwnProperty('newProperty') 来判断一下是否 obj 对象是否已有这个属性**
+
+### $refs + ref
+
+https://v2.cn.vuejs.org/v2/api/#vm-refs
+
+https://v2.cn.vuejs.org/v2/api/#ref
+
+https://v2.cn.vuejs.org/v2/guide/components-edge-cases.html#%E8%AE%BF%E9%97%AE%E5%AD%90%E7%BB%84%E4%BB%B6%E5%AE%9E%E4%BE%8B%E6%88%96%E5%AD%90%E5%85%83%E7%B4%A0
+
+### $nextTick
+
+`$nextTick` 指定的回调函数会在 DOM 节点更新完毕之后再执行。
+
+使用场景：当改变数据后，要基于更新后的新 DOM 进行某些操作时，要在 `$nextTick` 的回调函数中执行。
