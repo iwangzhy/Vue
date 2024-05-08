@@ -978,9 +978,10 @@ methods: {
 > 一般用于孙子组件向父组件传递数据（至少隔一个层级）
 
 1. 所有人都能看到
-  - windows 对象
-  - vc 对象
-  - vm 对象(**使用这个**)
+
+- windows 对象
+- vc 对象
+- vm 对象(**使用这个**)
 
 2. 可以使用 `$on` `$off` `$emit`
 
@@ -1037,7 +1038,8 @@ https://v2.cn.vuejs.org/v2/api/#Vue-set
 它必须用于向响应式对象上添加新 `property`，因为 `Vue` 无法探测普通的新增 `property`
 (比如 `this.myObject.newProperty = 'hi'`)
 
-**在使用 $set 之前需要通过 obj.hasOwnProperty('newProperty') 来判断一下是否 obj 对象是否已有这个属性**
+**在使用 $set 之前需要通过 obj.hasOwnProperty('newProperty') 来判断一下是否 obj 对象是否已有这个属性
+**
 
 ### $refs + ref
 
@@ -1083,10 +1085,13 @@ https://v2.cn.vuejs.org/v2/guide/components-edge-cases.html#%E8%AE%BF%E9%97%AE%E
 ```
 
 1. 元素进入的样式
+
 - `v-enter`：进入的起点
 - `v-enter-active`：进入的过程中
 - `v-enter-to`：进入的终点
+
 2. 元素离开的样式
+
 - `v-leave`：离开的起点
 - `v-leave-active`：离开过程中
 - `v-leave-to`：离开的终点
@@ -1123,6 +1128,7 @@ import 'animate.css';
 2. `jQuery`： `$.get` `$.post`
 3. `axios` **推荐**
 4. `fetch`  2 层 Promise、兼容性稍差。
+5. `vue-resource` 不再维护，不推荐。
 
 **Vue-CLI**
 
@@ -1130,9 +1136,10 @@ import 'animate.css';
 
 https://cli.vuejs.org/zh/config/#devserver-proxy
 
-- **配置1** 
+- **配置1**
 
 缺点：
+
 1. 只能配置 1 个代理服务器
 2. 不能控制请求是否走代理
 
@@ -1156,3 +1163,41 @@ devServer: {
   }
 }
 ```
+
+### 插槽 slot
+
+1. 默认插槽
+
+在子组件中使用 `<slot/>` 或者 `<slot>默认值...</slot>` 定义一个插槽。
+
+```
+<template>
+  <div class="category">
+    <h3>{{ title }}分类</h3>
+    <slot/>
+  </div>
+</template>
+```
+
+在父组件中向插槽填充数据。
+
+```
+<template>
+  <div class="container">
+    <Category title="美食">
+      <img :src="foods" alt="美食">
+    </Category>
+    <Category title="游戏">
+      <ul>
+        <li v-for="(i,index) in games" :key="index">{{ i }}</li>
+      </ul>
+    </Category>
+    <Category title="电影">
+      <video :src="films" controls/>
+    </Category>
+  </div>
+</template>
+```
+
+2. 具名插槽
+
