@@ -18,6 +18,11 @@ module.exports = defineConfig({
         ws: true, // websocket
         changeOrigin: true,
         pathRewrite: {'^/wangzhy': ''} // 把请求的 "/wangzhy" 去掉
+      },
+      '/lovelive':{
+        target:'https://api.lovelive.tools',
+        changeOrigin: true,
+        pathRewrite: {'^/lovelive': ''}
       }
     }
   }

@@ -1286,6 +1286,72 @@ devServer: {
 </template>
 ```
 
+### vuex
 
+在 Vue 中实现集中式状态管理的一个 Vue 插件，对 Vue 应用中**多个组件的共享**状态进行集中式的管理，也是一种**组件间通信**的方式，且适用于任意组件间通信。
 
+使用场景
+1. 多个组件依赖于同一个状态
+2. 来自不同组件的行为需要变更同一个状态
 
+```
+npm i vuex@3
+```
+
+`src/store/index.js`
+
+```
+// 该文件用于创建 Vuex 中最核心的 store 对象
+import Vue from 'vue';
+import Vuex from 'vuex';
+
+Vue.use(Vuex);
+
+// 准备 actions --- 用于响应组件中的动作
+const actions = {};
+
+// 准备 mutations --- 用于操作数据（state）
+const mutations = {};
+
+// 准备 state --- 用于存储数据
+const state = {};
+
+// 创建 store
+const store = new Vuex.Store({
+  actions, mutations, state
+});
+
+// 导出 store
+export default store;
+```
+
+#### Vuex 使用技巧
+
+首先数据是定义在 `index.js` 的 `state` 里面的。
+
+1. **获取 state 中的数据**
+
+在需要获取数据的组件中顶一个计算属性，在这个计算属性里面获取 `state` 中的数据。
+
+- **方法一**；通过 `this.$store.state.xxx` 获取数据。
+```
+export default {
+  name: "Person",
+  computed: {
+    personList(){
+      return this.$store.state.personList;
+    }
+  }
+}
+```
+- **方法二**：通过 `Vuex` 提供的 `mapState` 辅助函数来获取数据。
+```
+import {mapState} from "vuex";
+
+export default {
+  name: "Person",
+  computed: {
+    ...mapState(['personList'])
+  }
+}
+```
