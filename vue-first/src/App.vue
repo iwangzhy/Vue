@@ -1,19 +1,21 @@
 <template>
   <div>
-    <Count/>
-    <hr/>
-    <Person/>
+    <Banner/>
+    <hr>
+    <router-view>未点击时显示的内容。</router-view>
   </div>
 </template>
 
 <script>
 
-import Count from "@/components/Count.vue";
-import Person from "@/components/Person.vue";
+
+import Home from "@/pages/Home.vue";
+import About from "@/pages/About.vue";
+import Banner from "@/components/router/Banner.vue";
 
 export default {
   name: "App",
-  components: {Person, Count},
+  components: {Banner, About, Home},
   methods: {},
   mounted() {
   },
@@ -25,5 +27,8 @@ export default {
 </script>
 
 <style>
+.active {
+  color: red;
+}
 </style>
 

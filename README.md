@@ -1288,9 +1288,11 @@ devServer: {
 
 ### vuex
 
-在 Vue 中实现集中式状态管理的一个 Vue 插件，对 Vue 应用中**多个组件的共享**状态进行集中式的管理，也是一种**组件间通信**的方式，且适用于任意组件间通信。
+在 Vue 中实现集中式状态管理的一个 Vue 插件，对 Vue 应用中**多个组件的共享**状态进行集中式的管理，也是一种
+**组件间通信**的方式，且适用于任意组件间通信。
 
 使用场景
+
 1. 多个组件依赖于同一个状态
 2. 来自不同组件的行为需要变更同一个状态
 
@@ -1334,6 +1336,7 @@ export default store;
 在需要获取数据的组件中顶一个计算属性，在这个计算属性里面获取 `state` 中的数据。
 
 - **方法一**；通过 `this.$store.state.xxx` 获取数据。
+
 ```
 export default {
   name: "Person",
@@ -1344,7 +1347,9 @@ export default {
   }
 }
 ```
+
 - **方法二**：通过 `Vuex` 提供的 `mapState` 辅助函数来获取数据。
+
 ```
 import {mapState} from "vuex";
 
@@ -1354,4 +1359,452 @@ export default {
     ...mapState(['personList'])
   }
 }
+```
+
+### 路由 **vue-router 插件**
+
+- 路由就是一组 key-value 的对应关系
+  - key：**路径**
+  - value：**函数或者组件**
+- 多个路由，需要经过路由器的管理
+
+SPA：单页面应用。
+
+1. 单页 web 应用
+2. 整个应用只有一个完整的页面
+3. 点击页面中的导航连接不会刷新页面，只会做页面的局部更新
+4. 数据需要通过 ajax 请求获取
+
+#### 在 `Vue2` 中安装 `vue-router` 插件
+
+```
+npm i vue-router@3
+```
+
+新建一个 router/index.js 文件。用于 **创建整个应用的路由器**
+
+```
+import VueRouter from "vue-router";
+import Home from "@/components/router/Home.vue";
+import About from "@/components/router/About.vue";
+
+// 暴露路由器
+export default new VueRouter({
+  routes: [
+    {
+      path: "/home",
+      component: Home
+    },
+    {
+      path: "/about",
+      component: About
+    }
+  ]
+});
+```
+
+在 `main.js` 加入下面的配置。
+
+```
+import VueRouter from "vue-router";
+
+Vue.use(VueRouter);
+
+new Vue({
+  render: h => h(App),
+  router: roueter
+}).$mount('#app');
+```
+
+使用 `router-link` 标签实现路由的切换。
+
+```
+<router-link to="/about">about</router-link>
+```
+
+使用 `router-view` 标签来指定呈现时的位置。
+
+```
+<router-view></router-view>
+```
+
+#### 路由组件与一般组件
+
+- 路由组件，存放到 `src/pages` 里面
+- 一般组件，存放到 `src/components` 里面
+
+切换走的路由组件是被销毁了的，通过 beforeDestroy 钩子函数可以观察到。
+
+每个组件都有自己的 `$route` 对象。
+
+整个应用只有一个 router 对象，通过 `$router` 获取。
+
+#### 嵌套路由/多级路由
+
+嵌套路由的配置：
+
+```
+// 创建整个应用的路由器
+
+import VueRouter from "vue-router";
+import Home from "@/pages/Home.vue";
+import About from "@/pages/About.vue";
+import News from "@/pages/News.vue";
+import Message from "@/pages/Message.vue";
+
+// 暴露路由器
+export default new VueRouter({
+  routes: [
+    {
+      path: "/home",
+      component: Home,
+      children: [
+        {
+          path: "news", // 注意：此处不要写成 /news
+          component: News
+        },
+        {
+          path: "message",
+          component: Message
+        }]
+    },
+    {
+      path: "/about",
+      component: About
+    }
+  ]
+});
+```
+
+使用时要写完整的路径
+
+```
+<router-link to="/home/news">news</router-link>
+```
+
+#### 路由传参
+
+**query参数**
+
+路由配置 query 参数：
+
+- 字符串写法
+
+```
+<router-link :to="`/home/message/detail?id=${i.id}&title=${i.title}`">
+  {{ i.title }}
+</router-link>
+```
+
+- 对象写法
+
+```
+<router-link :to="{
+  path: '/home/message/detail',
+  query: {
+    id: i.id,
+    title: i.title
+  }
+}">
+  {{ i.title }}
+</router-link>
+```
+
+组件通过 `$route.query`接收 `query` 参数
+
+```
+<template>
+  <ul>
+    <li>消息编号：{{ $route.query.id}}</li>
+    <li>消息标题：{{ $route.query.title}}</li>
+  </ul>
+</template>
+```
+
+**命名路由**
+
+在配置路的时候，添加 `name` 属性。
+
+```
+// 暴露路由器
+export default new VueRouter({
+  routes: [
+    {
+      name : 'home',
+      path: "/home",
+      component: Home
+    }
+  ]
+});
+```
+
+使用的时候要使用 `to` 的**对象写法**。
+
+```
+<router-link :to="{name: 'home'}">
+  {{ i.title }}
+</router-link>
+```
+
+**params 参数**
+
+路由配置 params 参数
+
+```
+{
+  path: "message",
+  component: Message,
+  children:[
+    {
+      name:'detail',
+      path: "detail/:id/:title",  // 在这里配置 params 参数 
+      component: Detail
+    }
+  ]
+}
+```
+
+在组件中通过 `$route.params` 接收参数。
+
+```
+<ul>
+  <li>消息编号：{{ $route.params.id}}</li>
+  <li>消息标题：{{ $route.params.title}}</li>
+</ul>
+```
+
+配置路由请求
+
+```
+<router-link :to="`/home/message/detail/${i.id}/${i.title}`">
+  {{ i.title }}
+</router-link>
+```
+
+在使用对象写法时，不能使用 path ，**必须使用 name**
+
+```
+<router-link :to="{
+  name:'detail',  // 不能使用 path ，必须使用 name 
+  params:{
+    id: i.id,
+    title: i.title
+  }
+}">
+  {{ i.title }}
+</router-link>
+```
+
+**props配置**
+
+- 对象
+- 布尔
+- 函数
+
+```
+{
+  path: "message",
+  component: Message,
+  children: [
+    {
+      name: 'detail',
+      path: "detail/:id/:title",
+      component: Detail,
+      // 第一种写法：对象，该对象中的属性都会以 props 的形式传递给 Detail 组件
+      // props:{
+      //   a:'1',
+      //   b:'2'
+      // }
+      // 第二种写法：值为布尔值，若为 true，则会把该路由组件收到的所有 params 参数以 props 的形式传递给 Detail 组件
+      // props:true
+      // 第三种写法：值为函数，该函数接收当前路由对象作为参数，返回一个对象，该对象中的属性都会以 props 的形式传递给 Detail 组件
+      props({params:{id,title}}) {
+        return {
+          id, title
+        }
+      }
+    }
+  ]
+}
+```
+
+#### 浏览器的历史记录
+
+- push（默认）
+- replace ： 在 `router-link` 标签添加 `replace` 属性
+
+```
+<router-link :to="{
+  name:'detail',
+  params:{
+    id: i.id,
+    title: i.title
+  }
+}" replace>
+  {{ i.title }}
+</router-link>
+```
+
+#### 编程式路由
+
+```
+push(obj) {
+  console.log(this.$route)
+  this.$router.push({
+    name: 'detail',
+    query: {
+      id: obj.id,
+      title: obj.title
+    }
+  }).catch(err => {
+    console.log(err)
+  });;
+},
+replace(obj) {
+  this.$router.replace({
+    name: 'detail',
+    query: {
+      id: obj.id,
+      title: obj.title
+    }
+  }).catch(err => {
+    console.log(err)
+  });
+}
+```
+
+#### 缓存路由组件
+
+使用 `keep-alive` 标签来缓存路由组件,`include` 属性指定要缓存的路由组件的**组件名（name属性）**。
+
+缓存单个组件
+
+```
+<keep-alive include="News">
+  <router-view></router-view>
+</keep-alive>
+```
+
+缓存多个组件
+
+```
+<keep-alive :include="['News','Message']">
+  <router-view></router-view>
+</keep-alive>
+```
+
+#### 路由的生命周期函数/钩子
+
+> 注意：activated、deactivated 需要搭配 keep-alive 标签使用。
+
+- activated：路由组件放入缓存的时候执行
+- deactivated：路由组件从缓存取出的时候执行
+
+```
+export default {
+  name: "News",
+  activated() {
+    console.log('News activated')
+  },
+  deactivated() {
+    console.log('News deactivated')
+  }
+}
+```
+
+#### 路由守卫（权限管理）
+
+保护路由的安全。
+
+**全局前置路由守卫**
+
+```
+// 每一次路由切换之前都会执行此回调函数 (全局前置路由守卫)
+router.beforeEach((to, from, next) => {
+  console.log('beforeEach');
+  console.log('to', to);
+  console.log('from', from);
+  if (localStorage.getItem('name') === 'wangzhy') {
+    // 放行
+    next();
+  }
+});
+```
+
+**全局后置路由守卫**
+
+```
+// 全局后置路由守卫
+router.afterEach((to, from) => {
+  console.log('afterEach');
+  console.log('afterEach-to', to);
+  console.log('afterEach-from', from);
+  document.title = to.name|| 'vue';
+});
+```
+
+**独享路由守卫**
+
+只有独享前置路由守卫，没有独享后置路由守卫。
+
+```
+ {
+  name: 'news',
+  path: "news", // 注意：此处不要写成 /news
+  component: News,
+  meta: {
+    isAuth: true,
+    title:'新闻'
+  },
+  beforeEnter(to, from, next) {  // 独享路由守卫
+    console.log('beforeEnter');
+    console.log('beforeEnter-to', to);
+    console.log('beforeEnter-from', from);
+    if (localStorage.getItem('name') === 'wangzhy') {
+      next();
+    }
+  }
+}
+```
+
+**组件路由守卫**
+
+```
+// 通过路由规则进入该组件时被调用
+beforeRouteEnter(to, from, next) {
+  console.log("About beforeRouteEnter");
+  next();
+},
+// 通过路由规则，离开该组件时被调用
+beforeRouteLeave(to, from, next) {
+  console.log("About beforeRouteLeave");
+  next();
+}
+```
+
+#### history 模式与 hash 模式
+
+- hash 模式：**默认模式**，路径带有 `#` 号, `#` 号后面的内容不会发送给后端服务器。
+- history 模式：路径不带 `#` 号
+  - 部署之后，访问，刷新会出现 404 （后端可解决这个问题）
+    - Java ： 通过 SpringBoot 的 `@RequestMapping` 注解来匹配所有的"前端路由"
+    - Tomcat：通过配置 `web.xml` 文件来匹配所有的"前端路由"
+    - URL Rewrite：通过配置 `rewrite.config` 文件来匹配所有的"前端路由"
+    - Node.js：通过配置 `express` 服务器来匹配所有的"前端路由"
+
+```
+// 创建整个应用的路由器
+export default new VueRouter({
+  mode: 'history',
+  routes: [
+    {
+      path: "/home",
+      component: Home
+    },
+    {
+      path: "/about",
+      component: About
+    }
+  ]
+});
 ```
