@@ -1,8 +1,15 @@
 <template>
   <div>
-    <Banner/>
-    <hr>
-    <router-view>未点击时显示的内容。</router-view>
+<!--    <Banner/>-->
+<!--    <hr>-->
+<!--    <router-view>未点击时显示的内容。</router-view>-->
+    <button>原生</button>
+    <button>ElementUI</button>
+    <el-date-picker
+        v-model="value1"
+        type="date"
+        placeholder="选择日期">
+    </el-date-picker>
   </div>
 </template>
 

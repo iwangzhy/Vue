@@ -1808,3 +1808,35 @@ export default new VueRouter({
   ]
 });
 ```
+
+### Element UI
+
+https://element.eleme.cn/2.15/#/zh-CN/component/installation
+
+```
+npm i element-ui
+```
+
+全部引入
+
+```
+import ElementUI from 'element-ui';
+import 'element-ui/lib/theme-chalk/index.css';
+Vue.use(ElementUI);
+```
+
+按需引入
+
+```
+npm install babel-plugin-component -D
+```
+
+```
+import { Button, Select,DatePicker } from 'element-ui';
+import 'element-ui/lib/theme-chalk/index.css';
+
+Vue.component(Button.name, Button);
+Vue.component(Select.name, Select);
+Vue.component(DatePicker.name, DatePicker);
+```
+
