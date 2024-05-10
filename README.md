@@ -1840,3 +1840,299 @@ Vue.component(Select.name, Select);
 Vue.component(DatePicker.name, DatePicker);
 ```
 
+## 组件通信方式
+
+https://www.bilibili.com/video/BV1Xh411V7b5/?spm_id_from=333.788.video.desc.click
+
+- props
+- custom event
+- event bus
+- v-model
+- useAttrs
+- ref、$parent
+- provide-inject
+- pubsub
+- vuex、pinia
+- slot
+
+### props
+
+> props 传递的数据是**单向、只读**的。
+> - 单向的意思是：父组件数据变化，子组件数据也会变化。
+> - 只读的意思是：子组件不允许修改 props 数据。
+
+- **父传子**
+
+通过直接在子组件的标签里面写属性的方式向子组件中传递 `props` 数据。例如下面代码的 `name`、`age` 属性。
+
+```
+<Child name="xxxx" :age="xxx"></Child>
+```
+
+在子组件中接收父组件传递过来的 `props` 参数。
+
+```
+// Vue 3.0 中使用 `defineProps` 来定义 `props`。
+let props = defineProps(['name','age']);
+```
+
+- **子传父**
+- **兄弟组件通信**
+
+### 自定义事件
+
+> 自定义事件实现的是子组件通过 `$emit` 调用父组件定义的事件向父组件传递数据。
+
+**原生 DOM 事件**
+
+> 原生 DOM 事件是直接在 HTML 元素上触发的事件，如点击、输入等。
+
+了解下**原生事件** `@click`。在使用原生事件方法里面，
+如果要使用到 `event` 对象，需要在方法调用时加上
+`$event`，同时需要参数去接收。
+
+- Vue2 中，如果指定为原生事件，需要在事件名后面加上 `@click.native=xxx(p1,p2)` 修饰符。
+- Vue3 中，不需要加 `.native` 修饰符，改成 `@click="$emit('xxx','p1','p2')"`
+
+```
+<button @click="handler1(1,2,3,$event)">原生事件</button>
+
+const handler1 = (a,b,c,$event)=>{
+   console.log(a,b,c,$event)
+}
+```
+
+**自定义事件**
+
+定义自定义事件：直接定义一个方法。
+给子组件绑定自定义事件：在子组件的标签上使用 `v-on:xxx` 或者 `@xxx` 来绑定自定义事件。
+子组件触发自定义事件：在子组件的方法中使用 `$emit` 来触发自定义事件。
+
+```
+<Event2 @xxx="handler3" @click="handler4"></Event2>
+
+const handler3 = (param1,param2)=>{
+    console.log(param1,param2);
+}
+```
+
+```
+//利用defineEmits方法返回函数触发自定义事件
+//defineEmits方法不需要引入直接使用
+let $emit = defineEmits(['xxx','click']);
+
+$emit('xxx','p1','p2');
+```
+
+### $bus
+
+全局事件总线可以实现**任意组件通信**。
+
+**Vue2 引入 $bus**
+
+main.js
+
+```
+import Vue from 'vue';
+import App from './App.vue';
+
+new Vue({
+  // 将 App 组件放入容器中
+  render: h => h(App),
+  beforeCreate() {
+    // 全局事件总线
+    Vue.prototype.$bus = this;
+  }
+}).$mount('#app');
+```
+
+**Vue3 引入 $bus**
+
+Vue3 通过 mitt 组件实现全局事件总线。
+
+src/bus/index.js
+
+```
+import mitt from 'mitt';
+const $bus = mitt();
+export default $bus;
+```
+
+#### 绑定事件
+
+事件一般是在 `onMounted` 生命周期函数里面绑定的。
+
+Vue3 写法
+
+```
+import $bus from "../../bus";
+//组合式API函数
+import { onMounted } from "vue";
+//组件挂载完毕的时候,当前组件绑定一个事件,接受将来兄弟组件传递的数据
+onMounted(() => {
+  //第一个参数:即为事件类型  第二个参数:即为事件回调
+  $bus.on("car", (car) => {
+    console.log(car);
+  });
+});
+```
+
+#### 触发事件
+
+```
+//引入$bus对象
+import $bus from '../../bus';
+//点击按钮回调
+const handler = ()=>{
+  $bus.emit('car',{car:"Ferrari"});
+}
+```
+
+### v-model
+
+`v-model` 一般用于收集表单数据，数据双向绑定。
+`v-model` 也可用于组件标签上，实现组件间的数据双向绑定。
+
+> v-model 组件身上使用 `<Child v-model="money"></Child>`
+> 1. 相当有给子组件传递 `props[modelValue] = 10000`
+> 2. 相当于给子组件绑定自定义事件 `update:modelValue`
+
+父组件
+
+```
+<Child v-model="money"></Child>
+<Child1 v-model:pageNo="pageNo" v-model:pageSize="pageSize"></Child1>
+```
+
+子组件1
+
+```
+const handler = ()=>{
+   //触发自定义事件
+   $emit('update:modelValue',props.modelValue+1000);
+}
+```
+
+子组件2
+```
+<button @click="handler">pageNo{{ pageNo }}</button>
+<button @click="$emit('update:pageSize', pageSize + 4)">
+  pageSize{{ pageSize }}
+</button>
+    
+let props = defineProps(["pageNo", "pageSize"]);
+let $emit = defineEmits(["update:pageNo", "update:pageSize"]);
+//第一个按钮的事件回调
+const handler = () => {
+  $emit("update:pageNo", props.pageNo + 3);
+};    
+```
+
+### useAttrs
+
+Vue3 提供的 `useAttrs` 方法，可以获取到父组件传递过来的所有属性。
+
+```
+// 引入useAttrs方法:获取组件标签身上属性与事件
+import {useAttrs} from 'vue';
+// 此方法执行会返回一个对象
+let $attrs = useAttrs();
+
+// 万一用props接受title
+let props =defineProps(['title']);
+// props与useAttrs方法都可以获取父组件传递过来的属性与属性值
+// 但是props接受了useAttrs方法就获取不到了
+console.log($attrs);
+```
+
+### ref、$parent
+
+- `ref` 可以获取到真实 DOM 节点，以及子组件实例 VC。(需要子组件通过 `defineExpose` 暴露自己的属性。)
+- `$parent` 可以在子组件内获取到父组件的实例 VC。(需要父组件通过 `defineExpose` 暴露自己的属性。)
+
+### provide、inject
+
+`Vue3` 提供 `provide`(提供)与 `inject`(注入),**可以实现隔辈组件传递数据**。
+
+> **如果提供的数据是响应式的(ref 或 reactive) ，则数据是双向绑定的**
+
+**祖先组件**
+
+```
+import { ref, provide } from "vue";
+let car = ref("Ferrari");
+//祖先组件给后代组件提供数据
+// 第一个参数：提供的数据key
+// 第二个参数：祖先组件提供数据
+provide("TOKEN", car);
+```
+
+**孙子组件**
+
+```
+import {inject} from 'vue';
+//注入祖先组件提供数据
+//需要参数:即为祖先提供数据的key
+let car = inject('TOKEN');
+const updateCar = ()=>{
+   car.value  = 'Bike';
+}
+```
+
+### pubsub
+
+发布订阅模式: `pubsub-js`。 **Vue2**
+
+```
+npm install -g pubsub-js
+```
+
+1. 订阅消息（需要数据的组件）
+
+```
+import pubsub from 'pubsub-js';
+
+mounted() {
+  this.pubId = pubsub.subscribe('hello', (msgName, msg) => {
+    console.log(this);
+    console.log('School 接收到了订阅的消息', msgName, msg);
+  });
+},
+beforeDestroy() {
+  pubsub.unsubscribe(this.pubId);
+}
+```
+
+2. 发布消息（拥有消息的组件）
+
+```
+import pubsub from 'pubsub-js';
+
+methods: {
+  sendStudentName() {
+    pubsub.publish('hello', this.name);
+  }
+}
+```
+
+### vuex、pinia
+
+1. **`Vuex`：集中状态管理容器**
+- `state`：存储数据
+- `mutations`：操作数据
+- `actions`：响应组件中的动作
+- `getters`：获取数据
+- `modules`：模块化
+
+2. **`Pinia`：Vue3 的状态管理库**
+- `store`：存储数据
+- `actions`：操作数据
+- `getters`：获取数据
+
+### slot
+
+插槽：
+
+- 默认插槽
+- 具名插槽
+- 作用域插槽：子组件可以将数据传给父组件。
