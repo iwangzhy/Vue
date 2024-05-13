@@ -556,19 +556,11 @@ v-model 的三个修饰符
 - inserted
 - update
 
-### 声明周期
+### 生命周期
 
 ![](https://raw.githubusercontent.com/iwangzhy/picgo/master/20240506124325.png)
 
-- beforeCreate：实例初始化之后，数据观测和事件配置之前被调用。
-- created：实例创建完成后被立即调用。在这一步，实例已完成以下的配置：数据观测(data observer)
-  、属性和方法的运算、watch/event 事件回调。然而，挂载阶段还没开始，$el 属性目前不可见。
-- beforeMount：在挂载开始之前被调用：相关的 render 函数首次被调用。
-- mounted：el 被新创建的 vm.$el 替换，并挂载到实例上去之后调用该钩子。
-- beforeUpdate：数据更新时调用，发生在虚拟 DOM 重新渲染和打补丁之前。可以在该钩子中进一步地更改状态，不会触发附加的重渲染过程。
-- updated：由于数据更改导致的虚拟 DOM 重新渲染和打补丁，在这之后会调用该钩子。
-- beforeDestroy：实例销毁之前调用。在这一步，实例仍然完全可用。
-- destroyed：Vue 实例销毁后调用。调用后，Vue 实例指示的所有东西都会解绑，所有的事件监听器会被移除，所有的子实例也会被销毁。
+见[Vue 的生命周期](#Vue 的生命周期)
 
 常用的生命周期函数
 
@@ -2136,3 +2128,39 @@ methods: {
 - 默认插槽
 - 具名插槽
 - 作用域插槽：子组件可以将数据传给父组件。
+
+## Vue 的生命周期
+
+## Vue2
+![](https://raw.githubusercontent.com/iwangzhy/picgo/master/生命周期.png)
+
+1. `const vm = new Vue({})`：创建 Vue 对象
+2. `Init Events & Lifecycle`：初始化生命周期、事件，此时**数据代理还未开始**。
+3. `beforeCreate`：无法通过 vm 访问到 data 中的数据、methods 中的方法。
+4. `Init Injections & Reactions`：**初始化数据监测、数据代理。**
+5. `created`：**可以通过 vm 访问到 data 中的数据，methods 中配置的方法。**
+6. 在内存中编译模板。 （**此阶段 Vue 开始解析模板，生成虚拟 DOM，页面还不能显示解析好的内容**）
+   1. 判断有没有有 el 选项？ 
+   2. 判断有没有 template 选项？
+7. `beforeMount`：此时**页面呈现的是未经过 Vue 编译的 DOM 结构**。在此生命周期内对 DOM
+   的操作，最终不会生效。（会被虚拟 DOM 生成的 DOM 结构覆盖）
+8. `create vm.$el and replace 'el' with it`：将内存的虚拟 DOM 转为真实 DOM 并插入页面。
+9. `mounted`：此时页面呈现的是经过 Vue 编译的DOM。在此生命周期函数内对 DOM 的操作均有效。
+10. 至此初始化过程结束，一般在此进行：开启定时器、发送网络请求、订阅消息、绑定自定义事件等初始化操作。
+11. `when data changes`：数据被修改
+12. `beforeUpdate`：此时内存中的数据是新的，但是页面显示的数据是旧的。
+13. `Virtual DOM re-render and patch`：根据新数据，生成新的虚拟 DOM，随后与旧的虚拟 DOM
+    进行比较，最终完成页面更新，即完成了 Model-> View 的更新。
+14. `updated`：此时**页面和数据都已经完成更新**，数据和页面保持同步。
+15. `when vm.$destroy() is called`：调用 `vm.$destroy()` 方法
+16. `beforeDestroy`：此时，vm 中所有的  `data`、`methods`
+    、指令等都处于可用状态，马上要执行销毁过程，一般在此阶段：关闭定时器、取消订阅消息、解绑自定义事件等收尾操作。
+17. `destroyed`：Vue 实例已经完全销毁。
+
+### Vue3 
+
+https://cn.vuejs.org/guide/essentials/lifecycle.html#registering-lifecycle-hooks
+
+![](https://raw.githubusercontent.com/iwangzhy/picgo/master/20240513100954.png)
+
+在 `Vue3` 中， `beforeCreate` 和 `created` 被 `setup` 替代。其余的生命周期函数名前加上 `on`。
